@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="et99.js"></script>
+    <style>
+        a {
+            display: block;
+            margin: 20px;
+        }
+    </style>
+</head>
+
+<body onload="onLoad()">
+    <a href="javascript:findDevice()">查找设备</a>
+    <a href="javascript:openDevice()">打开设备</a>
+    <a href="javascript:closeDevice()">关闭设备</a>
+    <a href="javascript:getSN()">获取设备编号</a>
+    <a href="javascript:verify()">验证PIN码</a>
+    <a href="javascript:genRandom()">获取随机数</a>
+    <script>
+
+        var et99 = undefined
+
+        function onLoad() {
+            try {
+                // et99 = document.getElementById('et99') 
+                et99 = new ET99("{xxxxxx}")
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        function getSN() {
+            et99.ET99_GetSN(function (result, response) {
+                if (result) {
+                    alert(response)
+                }
+            })
+        }
+
+        function findDevice() {
+            et99.ET99_FindToken('FFFFFFFF', function (result, response) {
+                if (result) {
+                    if (response > 0) {
+                        alert('查找到' + response + '设备')
+                    } else {
+                        alert('未查找到设备')
+                    }
+                } else {
+                    alert('调用查找设备失败')
+                }
+            })
+        }
+
+        function openDevice() {
+            et99.ET99_OpenToken('FFFFFFFF', function (result, response) {
+                if (result) {
+                    if (response == 0) {
+                        alert('打开锁成功')
+                    } else {
+                        alert('打开指定锁失败')
+                    }
+                } else {
+                    alert('调用打开设备失败')
+                }
+            })
+        }
+
+        function closeDevice() {
+            et99.ET99_CloseToken(function (result, response) {
+                if (result) {
+                    alert('关闭锁成功')
+                } else {
+                    alert('关闭锁失败')
+                }
+            })
+        }
+
+        function verify() {
+            et99.ET99_Verify(function (result, response) {
+                if (result) {
+                    if (response == 0) {
+                        alert('验证PIN码成功')
+                    } else {
+                        alert('验证PIN码失败')
+                    }
+                } else {
+                    alert('调用验证PIN码失败')
+                }
+            })
+        }
+
+        function genRandom() {
+            et99.ET99_GenRandom(function (result, response) {
+                if (result) {
+                    alert('随机数:' + response)
+                } else {
+                    alert('调用生成随机数失败')
+                }
+            })
+        }
+
+    </script>
+</body>
+
+</html>
