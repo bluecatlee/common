@@ -1,3 +1,5 @@
+package com.github.bluecatlee.common.tree;
+
 import java.util.List;
 
 /**

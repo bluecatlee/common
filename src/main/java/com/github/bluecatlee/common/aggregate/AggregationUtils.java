@@ -1,3 +1,4 @@
+package com.github.bluecatlee.common.aggregate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;

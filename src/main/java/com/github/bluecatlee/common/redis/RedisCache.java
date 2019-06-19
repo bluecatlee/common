@@ -1,7 +1,10 @@
+package com.github.bluecatlee.common.redis;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.Map;
 
@@ -9,13 +12,31 @@ import java.util.Map;
  * Redis缓存
  */
 @Service("redisCache")
-public class RedisCache implements Cache {
+public class RedisCache {
 
-    @Autowired
+    // @Autowired
     private JedisPool jedisPool;
 
-    public void init() {
-		// 初始化jedis 不注入
+    public void init(Map<String, String> config) {
+		// 初始化jedis
+        String host = (String) config.get("host");
+        String port = (String) config.get("port");
+        String database = (String) config.get("database");
+        String password = (String) config.get("password");
+        if (password != null && password.isEmpty()) {
+            password = null;
+        }
+
+        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        jedisPoolConfig.setMaxTotal(100);
+        jedisPoolConfig.setMinIdle(10);
+        jedisPoolConfig.setMaxIdle(50);
+        jedisPoolConfig.setMaxWaitMillis(50 * 1000);
+        jedisPoolConfig.setTestOnBorrow(true);
+        jedisPoolConfig.setTestOnReturn(true);
+
+        jedisPool = new JedisPool(jedisPoolConfig, host, Integer.valueOf(port), 3000, password,
+                Integer.valueOf(database));
     }
 
     public void destroy() {

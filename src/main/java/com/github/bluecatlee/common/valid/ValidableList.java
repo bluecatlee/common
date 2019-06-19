@@ -1,3 +1,5 @@
+package com.github.bluecatlee.common.valid;
+
 import javax.validation.Valid;
 import java.util.*;
 

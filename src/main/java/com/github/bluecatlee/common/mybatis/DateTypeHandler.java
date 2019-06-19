@@ -1,3 +1,5 @@
+package com.github.bluecatlee.common.mybatis;
+
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
