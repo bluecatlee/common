@@ -14,7 +14,6 @@ public class AgeUtils {
 
     /**
      * 根据生日字符串计算年龄
-     * @author Wujun
      * @param birthday 生日字符串yyyy-MM-dd
      * @param showMonth 是否展示月份
      * @return
