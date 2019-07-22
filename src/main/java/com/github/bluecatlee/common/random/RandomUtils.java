@@ -1,4 +1,4 @@
-package com.yegoo.marketing.common.utils;
+package com.github.bluecatlee.common.random;
 
 import java.math.BigDecimal;
 import java.util.Random;

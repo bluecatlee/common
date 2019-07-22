@@ -23,13 +23,13 @@ public class AgeUtils {
             return null;
         }
         if (!showMonth) {
-            Integer age = BirthUtils.getAge(birthday);
+            Integer age = AgeUtils.getAge(birthday);
             if (age == null) {
                 return null;
             }
             return "" + age + "岁";
         } else {
-            Integer[] age = BirthUtils.getAgeWithMonth(birthday);
+            Integer[] age = AgeUtils.getAgeWithMonth(birthday);
             if (age == null) {
                 return null;
             }
