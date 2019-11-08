@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.bluecatlee.common.excel.frame.mapper.CommonReportMapper">
+
+    <!-- 通用报表查询 -->
+    <select id="commonReportQuery" parameterType="java.util.Map" resultType="java.util.HashMap" statementType="CALLABLE">
+        {
+            CALL ${reportProcName}
+            (
+                #{startTime, mode=IN},
+                #{endTime, mode=IN},
+                #{tabType, mode=IN},
+                #{columnStr, mode=OUT, jdbcType=VARCHAR},
+                #{statisticsStr, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 根据报表类别获取报表名称 -->
+    <select id="getReportNameByReportType" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT report_name FROM report_config WHERE del_flag = 2 AND report_type = #{reportType}
+    </select>
+
+    <!-- 根据报表类别获取存储过程名称 -->
+    <select id="getReportProcNameByReportType" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT proc_name FROM report_config WHERE del_flag = 2 AND report_type = #{reportType}
+    </select>
+
+</mapper>
