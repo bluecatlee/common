@@ -1,12 +1,12 @@
 package com.github.bluecatlee.common.redis;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Redis缓存
@@ -61,10 +61,11 @@ public class RedisCache {
         jedis.close();
     }
 
-    public void remove(final String key) {
+    public Long remove(final String key) {
         Jedis jedis = getJedis();
-        jedis.del(key);
+        Long del = jedis.del(key);
         jedis.close();
+        return del;
     }
 
     public Object get(final String key) {
@@ -137,6 +138,19 @@ public class RedisCache {
         }
         jedis.close();
         return rpop;
+    }
+
+    public void sadd(String key, String... str) {
+        Jedis jedis = getJedis();
+        jedis.sadd(key, str);
+        jedis.close();
+    }
+
+    public Set<String> smembers(String key) {
+        Jedis jedis = getJedis();
+        Set<String> stringSet = jedis.smembers(key);
+        jedis.close();
+        return stringSet;
     }
 
     private Jedis getJedis() {
