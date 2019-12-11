@@ -4,12 +4,14 @@ import com.github.bluecatlee.common.duplicateSubmit.annotation.DuplicateSubmitAn
 import com.github.bluecatlee.common.duplicateSubmit.utils.DuplicateKeyUtils;
 import com.github.bluecatlee.common.redis.RedisCache;
 import com.github.bluecatlee.common.rest.RestResult;
+import com.github.bluecatlee.common.spring.editor.DoubleEditor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
@@ -18,15 +20,15 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Executable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +36,7 @@ import java.util.UUID;
  * 全局异常及响应增强处理器
  */
 @ControllerAdvice
+// 如果使用@RestControllerAdvice 需要返回json的时候异常处理方法上就可以不用加@ResponseBody
 public class AdviceController implements ResponseBodyAdvice {
 
     private final Logger   logger = LoggerFactory.getLogger(AdviceController.class);
@@ -42,7 +45,25 @@ public class AdviceController implements ResponseBodyAdvice {
     private RedisCache cache;
 
     /**
+     * 绑定请求参数到指定的属性编辑器
+     * @param binder
+     */
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setDisallowedFields("ignore"); // 忽略form表单中名为ignore的字段的绑定 支持通配符
+
+        CustomDateEditor dateEditor = new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"),true);
+        binder.registerCustomEditor(Date.class, dateEditor);  // 将前端传递的时间格式字符串直接绑定到Date类型
+
+        DoubleEditor doubleEditor = new DoubleEditor();
+        binder.registerCustomEditor(Double.class, doubleEditor);  // 注册自定义的Double编辑器
+
+    }
+
+
+    /**
      * 异常处理
+     *      @ExceptionHandler可以直接指定异常类型 为每个异常写个异常处理方法
      * @param exception
      * @param request
      * @param response
