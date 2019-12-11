@@ -55,8 +55,12 @@ public class AdviceController implements ResponseBodyAdvice {
         CustomDateEditor dateEditor = new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"),true);
         binder.registerCustomEditor(Date.class, dateEditor);  // 将前端传递的时间格式字符串直接绑定到Date类型
 
+        // 说明: jackson直接序列化反序列化Date类型会有时差产生 因为会获取当前系统的时区进行处理 (不建议直接传Date类型的数据)
+        // 解决方案: 1). 局部处理, 字段加注解@JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")  只能处理Bean中的Date类型
+        //           2). 全局处理, 设置jackson的时区为GMT+8
+
         DoubleEditor doubleEditor = new DoubleEditor();
-        binder.registerCustomEditor(Double.class, doubleEditor);  // 注册自定义的Double编辑器
+        binder.registerCustomEditor(Double.class, doubleEditor);  // 注册自定义的Double编辑器 实测json格式传参时无效 todo
 
     }
 

@@ -1,4 +1,4 @@
-package com.github.bluecatlee.common.jackson;
+package com.github.bluecatlee.common.jackson.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
