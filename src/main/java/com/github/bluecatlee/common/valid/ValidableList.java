@@ -4,6 +4,12 @@ import javax.validation.Valid;
 import java.util.*;
 
 
+/**
+ * 可校验list
+ *      使用该类型替代java.util.List 解决bean中list类型的属性无法校验的问题
+ *      另一个方案 在list类型的属性 以及list<bean>的bean类型上都加上@Validated注解(或@Valid?)
+ * @param <E>
+ */
 public class ValidableList<E> implements List<E> {
 
     @Valid
