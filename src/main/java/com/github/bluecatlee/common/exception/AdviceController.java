@@ -3,7 +3,7 @@ package com.github.bluecatlee.common.exception;
 import com.github.bluecatlee.common.duplicateSubmit.annotation.DuplicateSubmitAnnotation;
 import com.github.bluecatlee.common.duplicateSubmit.utils.DuplicateKeyUtils;
 import com.github.bluecatlee.common.redis.RedisCache;
-import com.github.bluecatlee.common.rest.RestResult;
+import com.github.bluecatlee.common.restful.RestResult;
 import com.github.bluecatlee.common.spring.editor.DoubleEditor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
@@ -82,9 +82,8 @@ public class AdviceController implements ResponseBodyAdvice {
             logger.warn("OAuthException", exception.getMessage());
             return RestResult.LOGIN().build();
 
-            // 参数校验异常
-        } else if (exception instanceof BindException
-                || exception instanceof MethodArgumentNotValidException) {
+            // 参数校验异常 MethodArgumentNotValidException (外层异常是BindException 但是BindException不一定都是参数校验异常)
+        } else if (exception instanceof BindException || exception instanceof MethodArgumentNotValidException) {
             logger.warn("BindException", exception.getMessage());
             BindingResult bindingResult = null;
             if (exception instanceof BindException) {

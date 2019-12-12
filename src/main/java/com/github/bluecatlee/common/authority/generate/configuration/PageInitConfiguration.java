@@ -1,5 +1,6 @@
-package com.github.bluecatlee.common.other.genPageData;
+package com.github.bluecatlee.common.authority.generate.configuration;
 
+import com.github.bluecatlee.common.authority.generate.annotation.PageAnnotation;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

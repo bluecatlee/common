@@ -1,4 +1,4 @@
-package com.github.bluecatlee.common.rest;
+package com.github.bluecatlee.common.restful;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,4 +1,4 @@
-package com.github.bluecatlee.common.other.genPageData;
+package com.github.bluecatlee.common.authority.generate.annotation;
 
 import java.lang.annotation.*;
 
