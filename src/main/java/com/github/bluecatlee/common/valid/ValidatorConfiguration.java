@@ -14,11 +14,18 @@ import javax.validation.ValidatorFactory;
 @Configuration
 public class ValidatorConfiguration {
 
+    /**
+     * todo
+     *      如果引入了spring-cloud-stream的依赖 会存在循环引用的问题
+     *      自动创建的BindingHandlerAdvise Bean需要注入Validator Bean 因而依赖WebMvcProperties的初始化
+     *      而WebMvcProperties的初始化依赖BindingServiceConfiguration-BindingHandlerAdvise的初始化
+     */
     @Bean
     public Validator validator(){
         ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
                 .configure()
-                .addProperty( "hibernate.validator.fail_fast", "true" )
+                // .addProperty( "hibernate.validator.fail_fast", "true" )
+                .failFast(true)
                 .buildValidatorFactory();
         Validator validator = validatorFactory.getValidator();
 
