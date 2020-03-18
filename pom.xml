@@ -99,7 +99,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <dependency>
@@ -157,11 +157,11 @@
             <artifactId>swagger-models</artifactId>
             <version>1.5.21</version>
         </dependency>
-        <dependency>
-            <groupId>nl.jworks.markdown_to_asciidoc</groupId>
-            <artifactId>markdown_to_asciidoc</artifactId>
-            <version>1.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>nl.jworks.markdown_to_asciidoc</groupId>-->
+            <!--<artifactId>markdown_to_asciidoc</artifactId>-->
+            <!--<version>1.0</version>-->
+        <!--</dependency>-->
 
         <!-- ActiveMQ -->
         <dependency>
@@ -189,53 +189,53 @@
     <repositories>
 
         <!-- 私服 可以配置本地私服或者内网私服等 -->
-        <repository>
-            <id>nexus</id>                                  <!-- 仓库唯一标识 central是中央仓库 -->
-            <name>local private nexus</name>
-            <url>http://maven.yegoo.cc:8081/nexus/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>                     <!-- 允许releases版本 -->
-                <updatePolicy>always</updatePolicy>         <!-- 更新频率 默认daily -->
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>                     <!-- 允许snapshots版本 -->
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
+        <!--<repository>-->
+            <!--<id>nexus</id>                                  &lt;!&ndash; 仓库唯一标识 central是中央仓库 &ndash;&gt;-->
+            <!--<name>local private nexus</name>-->
+            <!--<url>http://maven.yegoo.cc:8081/nexus/content/groups/public/</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>                     &lt;!&ndash; 允许releases版本 &ndash;&gt;-->
+                <!--<updatePolicy>always</updatePolicy>         &lt;!&ndash; 更新频率 默认daily &ndash;&gt;-->
+            <!--</releases>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>                     &lt;!&ndash; 允许snapshots版本 &ndash;&gt;-->
+                <!--<updatePolicy>always</updatePolicy>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
 
         <!--swagger静态文档插件所需仓库-->
-        <repository>
-            <id>jcentral</id>
-            <name>bintray</name>
-            <url>http://jcenter.bintray.com</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>jcenter-snapshots</id>
-            <name>jcenter</name>
-            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
-        </repository>
+        <!--<repository>-->
+            <!--<id>jcentral</id>-->
+            <!--<name>bintray</name>-->
+            <!--<url>http://jcenter.bintray.com</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>jcenter-snapshots</id>-->
+            <!--<name>jcenter</name>-->
+            <!--<url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>-->
+        <!--</repository>-->
 
     </repositories>
 
     <!--swagger静态文档插件所需插件仓库-->
-    <pluginRepositories>
-        <pluginRepository>
-            <id>jcenter-snapshots</id>
-            <name>jcenter</name>
-            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>jcenter-releases</id>
-            <name>jcenter</name>
-            <url>http://jcenter.bintray.com</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+    <!--<pluginRepositories>-->
+        <!--<pluginRepository>-->
+            <!--<id>jcenter-snapshots</id>-->
+            <!--<name>jcenter</name>-->
+            <!--<url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>-->
+        <!--</pluginRepository>-->
+        <!--<pluginRepository>-->
+            <!--<id>jcenter-releases</id>-->
+            <!--<name>jcenter</name>-->
+            <!--<url>http://jcenter.bintray.com</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+        <!--</pluginRepository>-->
+    <!--</pluginRepositories>-->
 
     <build>
         <plugins>
