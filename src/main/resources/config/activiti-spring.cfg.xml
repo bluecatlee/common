@@ -1,0 +1,49 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 测试xml方式使用SpringProcessEngineConfiguration集成到Spring 主启动类未加载该配置文件-->
+
+    <!-- 配置连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>-->
+        <property name="url" value="jdbc:mysql://localhost:3306/activiti?serverTimezone=UTC"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root123"/>
+    </bean>
+
+    <!-- 事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!-- 配置使用spring提供的的流程引擎配置对象 -->
+    <bean id="processEngineConfiguration"
+          class="org.activiti.spring.SpringProcessEngineConfiguration">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="transactionManager" ref="transactionManager"></property>
+        <property name="databaseSchemaUpdate" value="true"></property>
+        <property name="deploymentResources" value="classpath*:/processes"></property>
+    </bean>
+
+    <!-- 配置流程引擎工厂bean，获取这个bean就可以直接获取到流程引擎对象 -->
+    <!--注意这个不是使用静态工厂来获取bean -->
+    <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+        <property name="processEngineConfiguration" ref="processEngineConfiguration"></property>
+    </bean>
+
+    <!-- 配置activiti的服务组件 -->
+    <!-- 这里是通过实例工厂来创建服务组件的对象
+    ProcessEngine类的父类EngineServices中有获取服务组件的get方法,所以这里把processEngine当做实例工厂来使用,
+    而这几个对象是在创建流程引擎配置对象时就new出来的
+     -->
+    <bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService">
+    </bean>
+    <bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService">
+    </bean>
+    <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService">
+    </bean>
+    <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService">
+    </bean>
+
+</beans>
