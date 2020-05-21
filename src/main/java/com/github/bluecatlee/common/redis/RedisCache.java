@@ -1,12 +1,14 @@
 package com.github.bluecatlee.common.redis;
 
+import com.github.bluecatlee.common.cache.Cache;
+
 import java.util.Map;
 import java.util.Set;
 
 /**
  * Redis缓存
  */
-public interface RedisCache {
+public interface RedisCache extends Cache {
 
     void init(Map<String, String> config);
 
