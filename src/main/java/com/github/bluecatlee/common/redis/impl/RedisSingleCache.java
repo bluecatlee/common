@@ -15,7 +15,7 @@ import java.util.Set;
  * Redis缓存
  */
 @Service
-@ConditionalOnMissingBean(RedisCache.class)
+@ConditionalOnMissingBean(RedisSentinelCache.class)
 public class RedisSingleCache implements RedisCache {
 
     @Autowired
