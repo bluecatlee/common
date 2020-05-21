@@ -1,6 +1,5 @@
 package com.github.bluecatlee.common.configuration;
 
-import com.github.bluecatlee.common.redis.RedisCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
@@ -9,7 +8,6 @@ import org.springframework.context.annotation.DependsOn;
 
 import javax.servlet.MultipartConfigElement;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 初始化配置
@@ -54,19 +52,19 @@ public class OuterPropConfiguration {
      * 初始化redisCache 指定在propertyCache之后初始化
      * 使用这种方式 RedisCache类上不要加@Service或类似注解
      */
-    @Bean(name = "redisCache")
-    @DependsOn("propertyCache")
-    public RedisCache getRedisCache() {
-        Map<String, String> config = new HashMap<>();
-        config.put("host", map.get("spring.redis.host"));
-        config.put("port", map.get("spring.redis.port"));
-        config.put("password", map.get("spring.redis.password"));
-        config.put("database", map.get("spring.redis.database"));
-        RedisCache cache = new RedisCache();
-        cache.init(config);
-        logger.info(TAG + "Init Redis Connection Success.");
-        return cache;
-    }
+    // @Bean(name = "redisCache")
+    // @DependsOn("propertyCache")
+    // public RedisSingleCache getRedisCache() {
+    //     Map<String, String> config = new HashMap<>();
+    //     config.put("host", map.get("spring.redis.host"));
+    //     config.put("port", map.get("spring.redis.port"));
+    //     config.put("password", map.get("spring.redis.password"));
+    //     config.put("database", map.get("spring.redis.database"));
+    //     RedisSingleCache cache = new RedisSingleCache();
+    //     cache.init(config);
+    //     logger.info(TAG + "Init Redis Connection Success.");
+    //     return cache;
+    // }
 
     /**
      * 文件上传大小限制的配置不使用配置文件 从数据库读取

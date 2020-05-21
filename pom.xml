@@ -164,25 +164,25 @@
         <!--</dependency>-->
 
         <!-- ActiveMQ -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-activemq</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.activemq</groupId>
-                    <artifactId>activemq-broker</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-pool</artifactId>
-            <version>5.7.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-activemq</artifactId>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.apache.activemq</groupId>-->
+<!--                    <artifactId>activemq-broker</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.activemq</groupId>-->
+<!--            <artifactId>activemq-client</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.activemq</groupId>-->
+<!--            <artifactId>activemq-pool</artifactId>-->
+<!--            <version>5.7.0</version>-->
+<!--        </dependency>-->
 
         <!-- Activiti -->
         <dependency>

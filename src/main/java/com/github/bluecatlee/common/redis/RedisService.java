@@ -9,6 +9,9 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * StringRedisTemplate的二次封装
+ */
 @Service
 public class RedisService {
 
