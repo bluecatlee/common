@@ -1,6 +1,7 @@
 package com.github.bluecatlee.common;
 
 import com.github.bluecatlee.common.redis.RedisCache;
+import com.github.bluecatlee.common.redis.RedisService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,9 @@ public class RedisSentinelTest {
     @Autowired
     private RedisCache redisCache;
 
+    @Autowired
+    private RedisService redisService;
+
     @Test
     public void testRedisSentinel() {
         String key = "testkey1";
@@ -26,6 +30,15 @@ public class RedisSentinelTest {
         redisCache.put(key, val);
         String value = (String)redisCache.get(key);
         Assert.assertEquals(value, val);
+    }
+
+    @Test
+    public void testRedisSentinelByRedisTemplate() {
+        String key = "testkey2";
+        String val = "hehe";
+        redisService.set(key, val);
+        String s = redisService.get(key);
+        Assert.assertEquals(s, val);
     }
 
 }
