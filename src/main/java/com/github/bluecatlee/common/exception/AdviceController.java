@@ -2,7 +2,7 @@ package com.github.bluecatlee.common.exception;
 
 import com.github.bluecatlee.common.duplicateSubmit.annotation.DuplicateSubmitAnnotation;
 import com.github.bluecatlee.common.duplicateSubmit.utils.DuplicateKeyUtils;
-import com.github.bluecatlee.common.redis.RedisCache;
+import com.github.bluecatlee.common.redis.jedis.RedisCache;
 import com.github.bluecatlee.common.restful.RestResult;
 import com.github.bluecatlee.common.spring.editor.DoubleEditor;
 import org.apache.commons.lang3.StringUtils;

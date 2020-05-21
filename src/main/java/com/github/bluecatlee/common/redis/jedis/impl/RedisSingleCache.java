@@ -1,6 +1,6 @@
-package com.github.bluecatlee.common.redis.impl;
+package com.github.bluecatlee.common.redis.jedis.impl;
 
-import com.github.bluecatlee.common.redis.RedisCache;
+import com.github.bluecatlee.common.redis.jedis.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Service;

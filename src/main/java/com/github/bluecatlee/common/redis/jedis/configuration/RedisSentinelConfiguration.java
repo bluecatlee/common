@@ -1,4 +1,4 @@
-package com.github.bluecatlee.common.redis.configuration;
+package com.github.bluecatlee.common.redis.jedis.configuration;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;

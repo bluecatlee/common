@@ -1,7 +1,7 @@
 package com.github.bluecatlee.common;
 
-import com.github.bluecatlee.common.redis.RedisCache;
-import com.github.bluecatlee.common.redis.RedisService;
+import com.github.bluecatlee.common.redis.jedis.RedisCache;
+import com.github.bluecatlee.common.redis.springtemplate.RedisService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

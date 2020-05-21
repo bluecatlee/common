@@ -5,7 +5,7 @@ import com.github.bluecatlee.common.duplicateSubmit.constants.Constants;
 import com.github.bluecatlee.common.duplicateSubmit.utils.DuplicateKeyUtils;
 import com.github.bluecatlee.common.exception.CommonException;
 import com.github.bluecatlee.common.exception.CommonExceptionEnum;
-import com.github.bluecatlee.common.redis.RedisCache;
+import com.github.bluecatlee.common.redis.jedis.RedisCache;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

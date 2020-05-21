@@ -1,4 +1,4 @@
-package com.github.bluecatlee.common.redis;
+package com.github.bluecatlee.common.redis.springtemplate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;
@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * StringRedisTemplate的二次封装
+ *      建议使用spring提供的模板类 或二次封装后的工具类 而不是直接操作jedis
+ *      便于redis从单机部署切换到master-slave+sentinel方式部署
  */
 @Service
 public class RedisService {

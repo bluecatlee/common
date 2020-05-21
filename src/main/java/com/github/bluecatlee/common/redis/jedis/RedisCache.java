@@ -1,4 +1,4 @@
-package com.github.bluecatlee.common.redis;
+package com.github.bluecatlee.common.redis.jedis;
 
 import com.github.bluecatlee.common.cache.Cache;
 
