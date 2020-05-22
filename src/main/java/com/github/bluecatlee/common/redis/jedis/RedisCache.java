@@ -1,6 +1,7 @@
 package com.github.bluecatlee.common.redis.jedis;
 
 import com.github.bluecatlee.common.cache.Cache;
+import redis.clients.jedis.Jedis;
 
 import java.util.Map;
 import java.util.Set;
@@ -8,32 +9,92 @@ import java.util.Set;
 /**
  * Redis缓存
  */
-public interface RedisCache extends Cache {
+public abstract class RedisCache implements Cache {
 
-    void init(Map<String, String> config);
+    protected abstract void init(Map<String, String> config);
 
-    void destroy();
+    protected abstract void destroy();
 
-    void put(final String key, final Object object);
+    public void put(final String key, final Object object) {
+        put(key, object, 0);
+    }
 
-    void put(final String key, final Object object, final int exp);
+    public void put(final String key, final Object object, final int exp) {
+        if (!(object instanceof String)) {
+            throw new RuntimeException("redis value must String");
+        }
+        Jedis jedis = getJedis();
+        if (exp == 0) {
+            jedis.set(key, String.valueOf(object));
+        } else {
+            jedis.setex(key, exp, String.valueOf(object));
+        }
+        jedis.close();
+    }
 
-    Long remove(final String key);
+    public Long remove(final String key) {
+        Jedis jedis = getJedis();
+        Long del = jedis.del(key);
+        jedis.close();
+        return del;
+    }
 
-    Object get(final String key);
+    public Object get(final String key) {
+        Jedis jedis = getJedis();
+        Object obj = jedis.get(key);
+        jedis.close();
+        return obj;
+    }
 
-    Long decr(final String key);
+    public Long decr(final String key) {
+        Jedis jedis = getJedis();
+        Long decr = jedis.decr(key);
+        jedis.close();
+        return decr;
+    }
 
-    Long incr(final String key);
+    public Long incr(final String key) {
+        Jedis jedis = getJedis();
+        Long incr = jedis.incr(key);
+        jedis.close();
+        return incr;
+    }
 
-    Long lpush(final String key, final String... values);
+    public Long lpush(final String key, final String... values) {
+        return lpush(key, 0, values);
+    }
 
-    Long lpush(final String key, final int exp, final String... values);
+    public Long lpush(final String key, final int exp, final String... values) {
+        Jedis jedis = getJedis();
+        Long lpush = jedis.lpush(key, values);
+        jedis.expire(key, exp);
+        jedis.close();
+        return lpush;
+    }
 
-    String rpop(final String key);
+    public String rpop(final String key) {
+        Jedis jedis = getJedis();
+        String rpop = jedis.rpop(key);
+        if (jedis.llen(key).longValue() <= 0) {
+            jedis.del(key);
+        }
+        jedis.close();
+        return rpop;
+    }
 
-    void sadd(String key, String... str);
+    public void sadd(String key, String... str) {
+        Jedis jedis = getJedis();
+        jedis.sadd(key, str);
+        jedis.close();
+    }
 
-    Set<String> smembers(String key);
+    public Set<String> smembers(String key) {
+        Jedis jedis = getJedis();
+        Set<String> stringSet = jedis.smembers(key);
+        jedis.close();
+        return stringSet;
+    }
+
+    protected abstract Jedis getJedis();
 
 }
