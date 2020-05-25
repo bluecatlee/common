@@ -1,4 +1,4 @@
-package com.github.bluecatlee.common.valid;
+package com.github.bluecatlee.common.valid.configuration;
 
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.context.annotation.Bean;

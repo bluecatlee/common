@@ -3,6 +3,7 @@ package com.github.bluecatlee.common.redis.jedis.impl;
 import com.github.bluecatlee.common.redis.jedis.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -14,7 +15,8 @@ import java.util.Map;
  * Redis缓存
  */
 @Service
-@ConditionalOnMissingBean(RedisSentinelCache.class)
+// @ConditionalOnMissingBean(RedisSentinelCache.class)
+@Profile("!redissentinel")
 public class RedisSingleCache extends RedisCache {
 
     @Autowired
