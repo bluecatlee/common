@@ -106,7 +106,7 @@ public class AdviceController implements ResponseBodyAdvice {
             if (CommonExceptionEnum.AUTHORITY_DENIED.equals(resultCode)) {
                 return RestResult.FORBIDDEN().build();
             }
-            // logger.error("============业务异常=========", exception);
+            // logger.error("============业务异常=========", com.github.bluecatlee.common.pay.exception);
             return RestResult.ERROR_SERVER().message(exception.getMessage()).build();
         } else {
             logger.error("Catch All Exception", exception);
