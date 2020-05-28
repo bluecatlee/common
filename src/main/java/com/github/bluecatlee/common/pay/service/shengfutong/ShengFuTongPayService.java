@@ -10,7 +10,7 @@ import com.github.bluecatlee.common.pay.service.shengfutong.bean.RefundNotify;
 import com.github.bluecatlee.common.pay.service.shengfutong.bean.RefundParam;
 import com.github.bluecatlee.common.pay.utils.YGCodecUtils;
 import com.github.bluecatlee.common.pay.utils.YGHttpClient;
-import com.github.bluecatlee.common.third.oufei.ParseXML;
+import com.github.bluecatlee.common.third.ofpay.ParseXML;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

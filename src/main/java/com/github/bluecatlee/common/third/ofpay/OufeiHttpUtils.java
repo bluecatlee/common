@@ -1,4 +1,4 @@
-package com.github.bluecatlee.common.third.oufei;
+package com.github.bluecatlee.common.third.ofpay;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;

@@ -1,4 +1,4 @@
-package com.github.bluecatlee.common.third.oufei;
+package com.github.bluecatlee.common.third.ofpay;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

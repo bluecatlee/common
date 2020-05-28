@@ -1,4 +1,4 @@
-package com.github.bluecatlee.common.third.oufei;
+package com.github.bluecatlee.common.third.ofpay;
 
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;

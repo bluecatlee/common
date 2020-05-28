@@ -10,7 +10,7 @@ import com.github.bluecatlee.common.pay.service.wechat.bean.PayParam;
 import com.github.bluecatlee.common.pay.service.wechat.bean.QueryPayParam;
 import com.github.bluecatlee.common.pay.service.wechat.bean.QueryRefundParam;
 import com.github.bluecatlee.common.pay.service.wechat.bean.RefundParam;
-import com.github.bluecatlee.common.third.oufei.ParseXML;
+import com.github.bluecatlee.common.third.ofpay.ParseXML;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
