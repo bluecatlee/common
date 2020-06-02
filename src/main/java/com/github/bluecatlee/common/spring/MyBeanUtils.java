@@ -1,4 +1,4 @@
-package com.ymxc.hospital.app.controller.manage;
+package com.github.bluecatlee.common.spring;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
  * 获取bean工具
  */
 @Component
-public class SpringUtil implements ApplicationContextAware {
+public class MyBeanUtils implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext = null;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        if(SpringUtil.applicationContext == null){
-            SpringUtil.applicationContext  = applicationContext;
+        if(MyBeanUtils.applicationContext == null){
+            MyBeanUtils.applicationContext  = applicationContext;
         }
     }
 
