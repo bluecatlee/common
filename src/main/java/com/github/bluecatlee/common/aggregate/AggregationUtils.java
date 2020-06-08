@@ -1,9 +1,11 @@
 package com.github.bluecatlee.common.aggregate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.bluecatlee.common.restful.RestResult;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.xml.transform.Source;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -15,10 +17,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * 聚合工具类
  */
+@SuppressWarnings("all")
 public class AggregationUtils {
 
     /**
@@ -134,6 +142,128 @@ public class AggregationUtils {
         return list;
     }
 
+    /**
+     * 串行完全没必要使用CompletableFuture, 也不必使用thenCompose方法
+     * 仅仅是练习
+     */
+    @Deprecated
+    public static <T,T1,T2> List<T> aggregate3Seril(Supplier<List<T1>> supplier1, Supplier<List<T2>> supplier2, String fieldName, Class<T> clazz) {
+        CompletableFuture<List<T1>> s1 = CompletableFuture.supplyAsync(supplier1);
+        CompletableFuture<List<T>> future = s1.thenCompose(new Function<List<T1>, CompletionStage<List<T>>>() {
+            @Override
+            public CompletionStage<List<T>> apply(List<T1> t1s) {
+                return CompletableFuture.supplyAsync(new Supplier<List<T>>() {
+                    @Override
+                    public List<T> get() {
+                        try {
+                            List<T2> t2s = CompletableFuture.supplyAsync(supplier2).get();
+                            return AggregationUtils.aggregate2(t1s, t2s, fieldName, clazz);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                });
+            }
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 异步聚合不同类型的Supplier<List<?>>成一个新类型的list
+     * @param supplier1 服务调用1
+     * @param supplier2 服务调用2
+     * @param fieldName 匹配字段
+     * @param clazz 新类型
+     * @param <T>
+     * @param <T1>
+     * @param <T2>
+     * @return
+     */
+    public static <T,T1,T2> List<T> aggregate3Async(Supplier<List<T1>> supplier1, Supplier<List<T2>> supplier2, String fieldName, Class<T> clazz) {
+        CompletableFuture<List<T1>> s1 = CompletableFuture.supplyAsync(supplier1);
+        CompletableFuture<List<T2>> s2 = CompletableFuture.supplyAsync(supplier2);
+        // 异步执行后处理结果
+        // CompletableFuture<List<T>> future = s1.thenCombine(s2, new BiFunction<List<T1>, List<T2>, List<T>>() {
+        //     @Override
+        //     public List<T> apply(List<T1> r1, List<T2> r2) {
+        //         try {
+        //             return AggregationUtils.aggregate2(r1, r2, fieldName, clazz);
+        //         } catch (Exception e) {
+        //             e.printStackTrace();
+        //         }
+        //         return null;
+        //     }
+        // });
+        // try {
+        //     return future.get();
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // } catch (ExecutionException e) {
+        //     e.printStackTrace();
+        // }
+        // return null;
+        CompletableFuture<Object> future = s1.thenCombine(s2, (r1, r2) -> {
+            try {
+                return AggregationUtils.aggregate2(r1, r2, fieldName, clazz);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
+        try {
+            return (List<T>)future.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 异步聚合 耦合服务调用结果RestResult
+     */
+    @Deprecated
+    public static <T,T1,T2> List<T> aggregate4(Supplier<RestResult<List<T1>>> supplier1, Supplier<RestResult<List<T2>>> supplier2, String fieldName, Class<T> clazz) {
+        CompletableFuture<RestResult<List<T1>>> s1 = CompletableFuture.supplyAsync(supplier1);
+        CompletableFuture<RestResult<List<T2>>> s2 = CompletableFuture.supplyAsync(supplier2);
+        CompletableFuture<Object> future = s1.thenCombine(s2, (r1, r2) -> {
+            if (r1.getCode() != 200) {
+                return s1;
+            }
+            if (r2.getCode() != 200) {
+                return s2;
+            }
+            List<T1> list1 = r1.getObject();
+            List<T2> list2 = r2.getObject();
+            try {
+                return AggregationUtils.aggregate2(list1, list2, fieldName, clazz);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
+        try {
+            return (List<T>)future.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * 根据字段类型的默认值判断该字段是否需要合并
@@ -232,8 +362,9 @@ public class AggregationUtils {
     @SuppressWarnings("all")
     public static void main(String[] args) {
 
-        test1();
-        test2();
+        // test1();
+        // test2();
+        test3();
 
     }
 
@@ -329,5 +460,94 @@ public class AggregationUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 模拟服务调用
+     */
+    private static void test3() {
+
+        class AService {
+            RestResult<List<A1>> a(int x) {
+                // System.out.println("service a execute, " + x);
+                ArrayList<A1> list = new ArrayList<>();
+                A1 a11 = new A1();
+                a11.setId(1L);
+                a11.setValue1("1");
+                list.add(a11);
+
+                A1 a12 = new A1();
+                a12.setId(2L);
+                a12.setValue1("2");
+                list.add(a12);
+
+                A1 a13 = new A1();
+                a13.setId(3L);
+                a13.setValue1("3");
+                list.add(a13);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                return RestResult.SUCCESS().object(list).build();
+            }
+        }
+        class BService {
+            RestResult<List<A2>> b() {
+                // System.out.println("service b execute");
+                ArrayList<A2> list = new ArrayList<>();
+                A2 a24 = new A2();
+                a24.setId(1L);
+                a24.setValue2("1");
+                a24.setValue3(1);
+                a24.setValue4(1L);
+                list.add(a24);
+
+                A2 a25 = new A2();
+                a25.setId(2L);
+                a25.setValue2("2");
+                a25.setValue3(2);
+                a25.setValue4(2L);
+                list.add(a25);
+
+                A2 a26 = new A2();
+                a26.setId(3L);
+                a26.setValue2("3");
+                a26.setValue3(3);
+                a26.setValue4(3L);
+                list.add(a26);
+
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                return RestResult.SUCCESS().object(list).build();
+            }
+        }
+        long t0 = System.currentTimeMillis();
+        List<A> list0 = null;
+        try {
+            list0 = aggregate2(new AService().a(1).getObject(), new BService().b().getObject(), "id", A.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        long t1 = System.currentTimeMillis();
+        List<A> list1 = aggregate3Seril(() -> new AService().a(1).getObject(), () -> new BService().b().getObject(), "id", A.class);
+        long t2 = System.currentTimeMillis();
+        List<A> list2 = aggregate3Async(() -> new AService().a(1).getObject(), () -> new BService().b().getObject(), "id", A.class);
+        long t3 = System.currentTimeMillis();
+        List<A> list3 = aggregate4(() -> new AService().a(1), () -> new BService().b(), "id", A.class);
+        System.out.println(list0);
+        System.out.println("serial exec " + (t1 - t0) + "ms");
+        System.out.println(list1);
+        System.out.println("aggregate3Seril exec " + (t2 - t1) + "ms");
+        System.out.println(list2);
+        System.out.println("aggregate3Async exec " + (t3 - t2) + "ms");
+        System.out.println(list3);
     }
 }
