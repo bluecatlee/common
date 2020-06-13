@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisSentinelPool;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 @Configuration
 @ConfigurationProperties(prefix = "spring.redis.sentinel")
 @Data
+@Profile("!test")
 public class RedisSentinelConfiguration {
 
     /**

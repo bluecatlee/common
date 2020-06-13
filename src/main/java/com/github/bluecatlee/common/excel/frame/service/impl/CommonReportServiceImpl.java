@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 
-@Service("commonReportService")
+//@Service("commonReportService")
 public class CommonReportServiceImpl implements CommonReportService {
 
     @Autowired
