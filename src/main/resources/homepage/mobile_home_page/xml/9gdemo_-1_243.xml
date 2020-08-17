@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ip_cont>
+
+<roll_adv id="2">
+<roll_a href="">
+<img height="155px" heightB="50%" src="http://image.yegoo.com/1505974715533.jpg" width="100%" widthB="100%"/>
+</roll_a>
+</roll_adv>
+<goodsmod class="gd-02" id="1">
+<li>
+<goods_a href="item/19.html" name="外星人Alienware15C-R2738 15.6英寸Gsync屏游戏笔记本电脑(test1)" price="￥1000">
+<img src="http://img13.360buyimg.com/n1/s450x450_jfs/t5677/251/6720253659/95144/bea1dd75/596c1c31Nb49491b6.jpg"/>
+</goods_a>
+</li>
+<li>
+<goods_a href="item/21.html" name="外星人Alienware15C-R2738 15.6英寸Gsync屏游戏笔记本电脑(i5精英钻石版GTX1060 6G)" price="￥100">
+<img src="http://img13.360buyimg.com/n1/s450x450_jfs/t5860/158/6735597686/157917/e784829c/596c1c3cNb3ee32ac.jpg"/>
+</goods_a>
+</li>
+<li>
+<goods_a href="item/300.html" name="123312123123123(i7精英钻石版GTX1060 6G)" price="￥0">
+<img src="http://image.yegoo.com/1502953696669.jpg!160"/>
+</goods_a>
+</li>
+<li>
+<goods_a href="item/7420.html" name="超级大本本(i7精英钻石版GTX1060 6G)" price="￥6000">
+<img src="http://image.yegoo.com/1503569556277.jpg!160"/>
+</goods_a>
+</li>
+</goodsmod>
+<dividing id="1"/>
+</ip_cont>
