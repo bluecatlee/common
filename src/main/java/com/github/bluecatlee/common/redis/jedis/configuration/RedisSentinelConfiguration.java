@@ -13,8 +13,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Configuration
-@ConfigurationProperties(prefix = "spring.redis.sentinel")
+// @Configuration
+// @ConfigurationProperties(prefix = "spring.redis.sentinel")
 @Data
 @Profile("!test")
 public class RedisSentinelConfiguration {

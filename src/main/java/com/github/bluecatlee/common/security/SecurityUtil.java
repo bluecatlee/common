@@ -14,7 +14,7 @@ import java.util.Collection;
 @Component
 public class SecurityUtil {
 
-    @Autowired
+    @Autowired(required = false)
     private UserDetailsService userDetailsService;
 
     public void logInAs(String username) {
