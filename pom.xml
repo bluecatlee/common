@@ -265,6 +265,13 @@
             <version>2.1.5.RELEASE</version>
         </dependency>
 
+        <!--FastDFS-->
+        <dependency>
+            <groupId>cn.bestwu</groupId>
+            <artifactId >fastdfs-client-java</artifactId>
+            <version>1.27</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
