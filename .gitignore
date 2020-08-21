@@ -29,3 +29,5 @@ docs/
 
 release.properties
 *.releaseBackup
+
+spring-shell.log
