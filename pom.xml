@@ -286,12 +286,31 @@
             <version>2.1.5.RELEASE</version>
         </dependency>
 
-        <!--FastDFS-->
+        <!-- FastDFS -->
         <dependency>
             <groupId>cn.bestwu</groupId>
-            <artifactId >fastdfs-client-java</artifactId>
+            <artifactId>fastdfs-client-java</artifactId>
             <version>1.27</version>
         </dependency>
+
+        <!-- xxl-job -->
+        <dependency>
+            <groupId>com.xuxueli</groupId>
+            <artifactId>xxl-job-core</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
+        <!-- tx-lcn -->
+<!--        <dependency>-->
+<!--            <groupId>com.codingapi.txlcn</groupId>-->
+<!--            <artifactId>txlcn-tc</artifactId>-->
+<!--            <version>5.0.1.RELEASE</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.codingapi.txlcn</groupId>-->
+<!--            <artifactId>txlcn-txmsg-netty</artifactId>-->
+<!--            <version>5.0.1.RELEASE</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 
