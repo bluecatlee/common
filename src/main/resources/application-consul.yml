@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    consul:
+      discovery:
+        instance-id: ${spring.application.name}:${server.port}
+    zookeeper:
+      enabled: false    #使用consul时要禁用zookeeper

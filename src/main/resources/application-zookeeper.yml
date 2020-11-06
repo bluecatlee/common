@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    consul:
+      enabled: false    #如果使用zookeeper 要把consul禁用掉
+    zookeeper:
+      discovery:
+        root: /bluecat #服务注册的跟节点
+        enabled: true
+        register: true #是否需要进行服务注册
+      #connect-string: 192.168.199.156:2181 #zk集群主机，多个用逗号隔开

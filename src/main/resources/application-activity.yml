@@ -1,0 +1,7 @@
+#  activiti:
+#    #表示启动时检查数据库表，不存在则创建
+#    database-schema-update: false
+#    #表示哪种情况下使用历史表，这里配置为full表示全部记录历史，方便绘制流程图
+#    history-level: full
+#    #true表示使用历史表(8张) 否则只会生成17张表
+#    db-history-used: true

@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    consul:
+      enabled: false
+    zookeeper:
+      enabled: false
+
+dubbo:
+  zookeeper:
+    host: 127.0.0.1:2181
