@@ -350,6 +350,19 @@
 <!--            <version>5.0.1.RELEASE</version>-->
 <!--        </dependency>-->
 
+        <!-- 网络工具包 ftp等 -->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.6</version>
+        </dependency>
+        <!--Java SSH实现-->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.49</version>
+        </dependency>
+
     </dependencies>
 
     <repositories>
