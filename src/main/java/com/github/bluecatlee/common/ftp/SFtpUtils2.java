@@ -3,10 +3,7 @@ package com.github.bluecatlee.common.ftp;
 import com.jcraft.jsch.*;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -55,7 +52,7 @@ public class SFtpUtils2 {
     }
 
     /**
-     * 上传
+     * 上传 调用者关闭输入流（Closeable的对象由创建者关闭）
      */
     public void upload(String directory, String filename, InputStream input) throws SftpException {
         sftp.cd(directory);
@@ -66,8 +63,13 @@ public class SFtpUtils2 {
      * 下载指定远程目录下的文件到本地
      */
     public void download(String directory, String downloadFile, String saveFile) throws SftpException, FileNotFoundException {
+        FileOutputStream output = new FileOutputStream(new File(saveFile));
         sftp.cd(directory);
-        sftp.get(downloadFile, new FileOutputStream(new File(saveFile)));
+        sftp.get(downloadFile, output);
+        try {
+            output.close();
+        } catch (IOException e) {
+        }
     }
 
     /**

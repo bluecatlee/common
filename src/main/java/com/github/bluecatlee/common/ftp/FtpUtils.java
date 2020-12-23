@@ -57,7 +57,7 @@ public class FtpUtils {
     }
 
     /**
-     * ftp 上传文件
+     * ftp 上传文件 调用者关闭输入流
      */
     public static boolean uploadFile(FTPClient ftp, String path, String filename, InputStream input) {
         boolean flag = false;
@@ -78,12 +78,12 @@ public class FtpUtils {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                }
-            }
+//            if (input != null) {
+//                try {
+//                    input.close();
+//                } catch (IOException e) {
+//                }
+//            }
             if (ftp.isConnected()) {
                 try {
                     ftp.disconnect();
