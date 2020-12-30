@@ -9,8 +9,9 @@
 &emsp;exception:   自定义异常封装; Controller异常拦截处理demo      
 &emsp;fastdfs:           FastDFS工具类           
 &emsp;file:              文件工具类   
+&emsp;ftp:               FTP SFTP工具类   
 &emsp;jackson:      Jackson中常用的配置及序列化器      
-&emsp;lock:              分布式锁demo              
+&emsp;lock:              基于redis、zookeeper、consul的分布式锁          
 &emsp;mybatis:      Mybatis中常用的类型映射器    
 &emsp;pagination:  分页工具        
 &emsp;pay:             第三方支付工具 支持支付宝支付(pc h5)、微信支付(pc、h5)、   			盛付通支付    
