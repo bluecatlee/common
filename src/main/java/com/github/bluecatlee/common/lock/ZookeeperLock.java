@@ -14,7 +14,9 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * 基于zookeeper的分布式锁
  *      核心是利用其临时有序节点的特性：如果当前节点是顺序最小的，则获取锁；连接关闭后释放锁。
+ *      待优化： 只有一把锁 只能同一个业务使用。需要根据业务将临时节点放在不同的目录下
  *      todo 问题： 会话超时(比如会话时间设置过短且gc长时间停顿可能导致zk服务端在超时时间内检测不到客户端心跳)也会导致临时节点被删除，这个时候就会导致锁失效
+ *      todo 如果并发数超出了zkServer针对每个ip的最大连接数 则锁会失效。因为此时连接会被服务端主动关闭，且客户端捕获不到异常
  */
 public class ZookeeperLock {
 
@@ -23,7 +25,7 @@ public class ZookeeperLock {
     private String currentPath;
     private CountDownLatch latch = null;
     private static String keeperAddress = "10.203.1.44:2181";       // zkServer的地址，多个地址逗号分隔
-    protected static String path = "/seqlocks";                     // 分布式锁使用的根节点 持久节点 下面的子节点是临时节点
+    protected static String path = "/locks";                     // 分布式锁使用的根节点 持久节点 下面的子节点是临时节点
     protected ZkClient client;
 
     public ZookeeperLock() {
@@ -50,10 +52,11 @@ public class ZookeeperLock {
     }
 
     /**
-     * 释放锁 直接关闭连接 临时节点会自动删除
+     * 释放锁
      */
     public void unLock() {
         if (this.client != null) {
+            this.client.delete(this.currentPath);   // 主动删除节点而不是等待连接释放后自动删除节点
             this.client.close();
         }
     }
@@ -130,20 +133,22 @@ public class ZookeeperLock {
 
     public static void main(String[] args) {
 
-//        ZookeeperDistributeLock zookeeperDistributeLock = new ZookeeperDistributeLock();
+//        ZookeeperLock zookeeperDistributeLock = new ZookeeperLock();
 //        System.out.println(zookeeperDistributeLock.getStatus());
 //        zookeeperDistributeLock.getLock();
 //        zookeeperDistributeLock.unLock();
 //        System.out.println(zookeeperDistributeLock.getStatus());
 
 //        String addresses = "10.203.1.43:2181,10.203.1.44:2181,10.203.1.45:2181";
-//        testConcurrency(addresses);
+        String addresses = "172.17.128.31:2181";
+        testConcurrency(addresses);
     }
 
     private static boolean testConcurrency(String addresses) {
 
-        Set<String> set = new CopyOnWriteArraySet<>();  // HashSet不是线程安全的
-        Set<String> set2 = new CopyOnWriteArraySet<>();  // HashSet不是线程安全的
+        Set<String> set = new CopyOnWriteArraySet<>();
+        Set<String> set2 = new CopyOnWriteArraySet<>();  // 成功获取过锁的线程名
+        Set<String> set3 = new CopyOnWriteArraySet<>();  // 获取锁失败的线程名
         AtomicLong counter = new AtomicLong();
 
         class MyRunnable implements Runnable {
@@ -163,17 +168,27 @@ public class ZookeeperLock {
                 } catch (BrokenBarrierException e) {
                     e.printStackTrace();
                 }
+                String threadName = Thread.currentThread().getName();
+//                    System.out.println(threadName);
                 ZookeeperLock zookeeperLock = new ZookeeperLock(addresses);
-                zookeeperLock.getLock();
-                if (counter.get() == 0) {
-//                    try {
-//                        Thread.sleep(40000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
+                try {
+                    zookeeperLock.getLock();
+                } catch (Exception e) {
+                    // 获取锁失败
+                    set3.add(threadName);
+                    return;
+                }
+                if (counter.get() > 1) {
+                    System.out.println("error ================");
+                    return;
+                }
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     // 每次获得锁的时候 必须没有其他线程获得锁
-                    String threadName = Thread.currentThread().getName();
-//                System.out.println(threadName);
                     boolean add = set.add(threadName);
                     set2.add(threadName);
                     if (add) {
@@ -181,17 +196,16 @@ public class ZookeeperLock {
                     }
                     zookeeperLock.unLock();
                     boolean remove = set.remove(threadName);
-                    if (add) {
+                    if (remove) {
                         counter.decrementAndGet();
                     }
-                }
 
             }
         }
 
         long startTime = System.currentTimeMillis();
 
-        int count = 1000;
+        int count = 300;
         CyclicBarrier cyclicBarrier = new CyclicBarrier(count);
         ExecutorService executorService = Executors.newFixedThreadPool(count);
         for (int i = 0; i < count; i++) {
@@ -209,6 +223,8 @@ public class ZookeeperLock {
         long endTime = System.currentTimeMillis();
         System.out.println("Execute time：" + ((endTime - startTime) / 1000) + " s");
 
+        System.out.println(set2.size());
+        System.out.println(set3.size());
 //        System.out.println(counter.get());
 //        System.out.println("-----------------");
         if (set2.size() != count) {
