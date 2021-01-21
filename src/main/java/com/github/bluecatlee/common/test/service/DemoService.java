@@ -9,7 +9,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.List;
 
 @Service
-public class DemoService extends BaseService {
+public class DemoService extends BaseService<TPosDevice, TPosDevice> {
 
     public CommonResp<List<TPosDevice>> query(CommonResp.Meta meta) {
         Example example = new Example(TPosDevice.class);
