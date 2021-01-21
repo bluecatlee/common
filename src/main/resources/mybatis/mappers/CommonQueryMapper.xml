@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.bluecatlee.common.test.mapper.CommonQueryMapper">
+  <resultMap id="BaseResultMap" type="com.github.bluecatlee.common.test.entity.CommonQuery">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="series" jdbcType="BIGINT" property="series" />
+    <result column="sql_name" jdbcType="VARCHAR" property="sqlName" />
+    <result column="sql_id" jdbcType="VARCHAR" property="sqlId" />
+    <result column="jdbc_name" jdbcType="VARCHAR" property="jdbcName" />
+    <result column="create_dtme" jdbcType="TIMESTAMP" property="createDtme" />
+    <result column="last_updtme" jdbcType="TIMESTAMP" property="lastUpdtme" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="last_update_user_id" jdbcType="BIGINT" property="lastUpdateUserId" />
+    <result column="cancel_sign" jdbcType="CHAR" property="cancelSign" />
+    <result column="tenant_num_id" jdbcType="INTEGER" property="tenantNumId" />
+    <result column="data_sign" jdbcType="TINYINT" property="dataSign" />
+    <result column="db_type" jdbcType="VARCHAR" property="dbType" />
+    <result column="annotate_prefix" jdbcType="VARCHAR" property="annotatePrefix" />
+    <result column="sub_sql_id" jdbcType="VARCHAR" property="subSqlId" />
+    <result column="no_data_exception" jdbcType="CHAR" property="noDataException" />
+    <result column="cache_sign" jdbcType="INTEGER" property="cacheSign" />
+    <result column="method_name" jdbcType="VARCHAR" property="methodName" />
+    <result column="cache_live_time" jdbcType="INTEGER" property="cacheLiveTime" />
+    <result column="_dble_op_time" jdbcType="BIGINT" property="dbleOpTime" />
+    <result column="cancelsign" jdbcType="CHAR" property="cancelsign" />
+    <result column="sql_content" jdbcType="LONGVARCHAR" property="sqlContent" />
+    <result column="param_content" jdbcType="LONGVARCHAR" property="paramContent" />
+    <result column="return_handle_content" jdbcType="LONGVARCHAR" property="returnHandleContent" />
+  </resultMap>
+</mapper>
