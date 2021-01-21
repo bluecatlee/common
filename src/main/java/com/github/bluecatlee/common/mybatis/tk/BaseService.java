@@ -1,9 +1,8 @@
 package com.github.bluecatlee.common.mybatis.tk;
 
+import com.github.bluecatlee.common.test.bean.CommonResp;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import lombok.*;
-import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,29 +22,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Deprecated
 public class BaseService<T, V> {
-
-    @Getter
-    @Setter
-    @ToString
-    @Accessors(chain = true)
-    public static class CommonResp<T> {
-        private T data;
-        private Integer returnCode = 0;
-        private String returnMessage = "OK";
-        private Meta meta;
-
-        @Data
-        @Builder
-        @NoArgsConstructor
-        @AllArgsConstructor
-        static public class Meta {
-            public static final Meta ONE = Meta.builder().page(1).pageSize(1).build();
-            public static final Meta ALL = Meta.builder().page(1).pageSize(10000).build();
-            Integer page = 1;
-            Integer pageSize = 10;
-            Long total;
-        }
-    }
 
     @Autowired
     private Mapper<T> mapper;

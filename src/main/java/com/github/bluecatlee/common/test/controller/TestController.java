@@ -3,7 +3,7 @@ package com.github.bluecatlee.common.test.controller;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.github.bluecatlee.common.jackson.serializer.LongToStringSerializer;
-import com.github.bluecatlee.common.mybatis.tk.BaseService;
+import com.github.bluecatlee.common.test.bean.CommonResp;
 import com.github.bluecatlee.common.test.service.DemoService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class TestController {
     }
 
     @GetMapping("test2")
-    public BaseService.CommonResp test2(BaseService.CommonResp.Meta meta) {
+    public CommonResp test2(CommonResp.Meta meta) {
         return demoService.query(meta);
     }
 
