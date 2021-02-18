@@ -49,6 +49,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>2.1.6.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin.external.google</groupId>
+                    <artifactId>android-json</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.junit.jupitor</groupId>
+                    <artifactId>junit-jupitor-api</artifactId>
+                </exclusion>
+            </exclusions>
             <!--<scope>test</scope>-->
         </dependency>
         <dependency>

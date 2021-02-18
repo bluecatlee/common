@@ -7,5 +7,4 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 @EnableHystrix
 public class TestCommonApplication {
 
-
 }

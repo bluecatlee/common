@@ -1,6 +1,9 @@
 功能介绍        
 &emsp;aggregate:    聚合工具类, 用于List数据的聚合   
+&emsp;async:   异步任务的包装 支持异常处理   
 &emsp;authority:      spring mvc接口信息收集, 作为权限接口的初始化数据    
+&emsp;bean.dependency:  循环依赖的演示     
+&emsp;datasource:  动态数据源    
 &emsp;date:             年龄工具类   
 &emsp;duplicateSubmit: 接口重复提交校验的Aspect    
 &emsp;email:           邮件工具类    
@@ -10,9 +13,10 @@
 &emsp;fastdfs:           FastDFS工具类           
 &emsp;file:              文件工具类   
 &emsp;ftp:               FTP SFTP工具类   
+&emsp;interceptor:  一些拦截器如接口耗时计算的拦截器    
 &emsp;jackson:      Jackson中常用的配置及序列化器      
 &emsp;lock:              基于redis、zookeeper、consul的分布式锁          
-&emsp;mybatis:      Mybatis中常用的类型映射器    
+&emsp;mybatis:      Mybatis中常用的类型映射器 tkMybatis的封装      
 &emsp;pagination:  分页工具        
 &emsp;pay:             第三方支付工具 支持支付宝支付(pc h5)、微信支付(pc、h5)、   			盛付通支付    
 &emsp;random:      随机字符串，给定范围内的随机小数生成      
