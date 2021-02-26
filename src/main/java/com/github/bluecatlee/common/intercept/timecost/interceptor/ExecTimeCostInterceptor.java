@@ -1,4 +1,4 @@
-package com.github.bluecatlee.common.interceptor;
+package com.github.bluecatlee.common.intercept.timecost.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.NamedThreadLocal;
