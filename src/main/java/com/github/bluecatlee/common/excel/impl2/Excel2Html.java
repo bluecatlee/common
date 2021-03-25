@@ -230,18 +230,24 @@ public class Excel2Html {
     private static void dealExcelStyle(Workbook wb, Sheet sheet, Cell cell, StringBuffer sb) {
         CellStyle cellStyle = cell.getCellStyle();
         if (cellStyle != null) {
-            short alignment = cellStyle.getAlignment();
-            sb.append("align='" + convertAlignToHtml(alignment) + "' ");//单元格内容的水平对齐方式  
-            short verticalAlignment = cellStyle.getVerticalAlignment();
-            sb.append("valign='" + convertVerticalAlignToHtml(verticalAlignment) + "' ");//单元格中内容的垂直排列方式
+//            short alignment = cellStyle.getAlignment();
+//            sb.append("align='" + convertAlignToHtml(alignment) + "' ");//单元格内容的水平对齐方式
+            HorizontalAlignment alignmentEnum = cellStyle.getAlignmentEnum();
+            sb.append("align='" + convertAlignToHtml(alignmentEnum) + "' ");//单元格内容的水平对齐方式
+//            short verticalAlignment = cellStyle.getVerticalAlignment();
+//            sb.append("valign='" + convertVerticalAlignToHtml(verticalAlignment) + "' ");//单元格中内容的垂直排列方式
+            VerticalAlignment verticalAlignmentEnum = cellStyle.getVerticalAlignmentEnum();
+            sb.append("valign='" + convertVerticalAlignToHtml(verticalAlignmentEnum) + "' ");//单元格中内容的垂直排列方式
 
             if (wb instanceof XSSFWorkbook) {
 
                 XSSFFont xf = ((XSSFCellStyle) cellStyle).getFont();
-                short boldWeight = xf.getBoldweight();
+//                short boldWeight = xf.getBoldweight();
+                boolean bold = xf.getBold();
                 sb.append("style='");
-                sb.append("font-weight:" + boldWeight + ";"); // 字体加粗  
-                sb.append("font-size: " + xf.getFontHeight() / 2 + "%;"); // 字体大小  
+//                sb.append("font-weight:" + boldWeight + ";"); // 字体加粗
+                sb.append("font-weight:" + bold + ";"); // 字体加粗
+                sb.append("font-size: " + xf.getFontHeight() / 2 + "%;"); // 字体大小
                 int columnWidth = sheet.getColumnWidth(cell.getColumnIndex());
                 sb.append("width:" + columnWidth + "px;");
 
@@ -260,13 +266,15 @@ public class Excel2Html {
                 sb.append(getBorderStyle(3, cellStyle.getBorderLeft(), ((XSSFCellStyle) cellStyle).getLeftBorderXSSFColor()));
             } else if (wb instanceof HSSFWorkbook) {
                 HSSFFont hf = ((HSSFCellStyle) cellStyle).getFont(wb);
-                short boldWeight = hf.getBoldweight();
+//                short boldWeight = hf.getBoldweight();
+                boolean bold = hf.getBold();
                 short fontColor = hf.getColor();
                 sb.append("style='");
                 HSSFPalette palette = ((HSSFWorkbook) wb).getCustomPalette(); // 类HSSFPalette用于求的颜色的国际标准形式
                 HSSFColor hc = palette.getColor(fontColor);
-                sb.append("font-weight:" + boldWeight + ";"); // 字体加粗  
-                sb.append("font-size: " + hf.getFontHeight() / 2 + "%;"); // 字体大小  
+//                sb.append("font-weight:" + boldWeight + ";"); // 字体加粗
+                sb.append("font-weight:" + bold + ";"); // 字体加粗
+                sb.append("font-size: " + hf.getFontHeight() / 2 + "%;"); // 字体大小
                 String fontColorStr = convertToStardColor(hc);
                 if (fontColorStr != null && !"".equals(fontColorStr.trim())) {
                     sb.append("color:" + fontColorStr + ";"); // 字体颜色  
@@ -288,51 +296,164 @@ public class Excel2Html {
         }
     }
 
+//    private static void dealExcelStyle_3_14(Workbook wb, Sheet sheet, Cell cell, StringBuffer sb) {
+//        CellStyle cellStyle = cell.getCellStyle();
+//        if (cellStyle != null) {
+//            short alignment = cellStyle.getAlignment();
+//            sb.append("align='" + convertAlignToHtml(alignment) + "' ");//单元格内容的水平对齐方式
+//            short verticalAlignment = cellStyle.getVerticalAlignment();
+//            sb.append("valign='" + convertVerticalAlignToHtml(verticalAlignment) + "' ");//单元格中内容的垂直排列方式
+//
+//            if (wb instanceof XSSFWorkbook) {
+//
+//                XSSFFont xf = ((XSSFCellStyle) cellStyle).getFont();
+//                short boldWeight = xf.getBoldweight();
+//                sb.append("style='");
+//                sb.append("font-weight:" + boldWeight + ";"); // 字体加粗
+//                sb.append("font-size: " + xf.getFontHeight() / 2 + "%;"); // 字体大小
+//                int columnWidth = sheet.getColumnWidth(cell.getColumnIndex());
+//                sb.append("width:" + columnWidth + "px;");
+//
+//                XSSFColor xc = xf.getXSSFColor();
+//                if (xc != null && !"".equals(xc)) {
+//                    sb.append("color:#" + xc.getARGBHex().substring(2) + ";"); // 字体颜色
+//                }
+//
+//                XSSFColor bgColor = (XSSFColor) cellStyle.getFillForegroundColorColor();
+//                if (bgColor != null && !"".equals(bgColor)) {
+//                    sb.append("background-color:#" + bgColor.getARGBHex().substring(2) + ";"); // 背景颜色
+//                }
+//                sb.append(getBorderStyle(0, cellStyle.getBorderTop(), ((XSSFCellStyle) cellStyle).getTopBorderXSSFColor()));
+//                sb.append(getBorderStyle(1, cellStyle.getBorderRight(), ((XSSFCellStyle) cellStyle).getRightBorderXSSFColor()));
+//                sb.append(getBorderStyle(2, cellStyle.getBorderBottom(), ((XSSFCellStyle) cellStyle).getBottomBorderXSSFColor()));
+//                sb.append(getBorderStyle(3, cellStyle.getBorderLeft(), ((XSSFCellStyle) cellStyle).getLeftBorderXSSFColor()));
+//            } else if (wb instanceof HSSFWorkbook) {
+//                HSSFFont hf = ((HSSFCellStyle) cellStyle).getFont(wb);
+//                short boldWeight = hf.getBoldweight();
+//                short fontColor = hf.getColor();
+//                sb.append("style='");
+//                HSSFPalette palette = ((HSSFWorkbook) wb).getCustomPalette(); // 类HSSFPalette用于求的颜色的国际标准形式
+//                HSSFColor hc = palette.getColor(fontColor);
+//                sb.append("font-weight:" + boldWeight + ";"); // 字体加粗
+//                sb.append("font-size: " + hf.getFontHeight() / 2 + "%;"); // 字体大小
+//                String fontColorStr = convertToStardColor(hc);
+//                if (fontColorStr != null && !"".equals(fontColorStr.trim())) {
+//                    sb.append("color:" + fontColorStr + ";"); // 字体颜色
+//                }
+//                int columnWidth = sheet.getColumnWidth(cell.getColumnIndex());
+//                sb.append("width:" + columnWidth + "px;");
+//                short bgColor = cellStyle.getFillForegroundColor();
+//                hc = palette.getColor(bgColor);
+//                String bgColorStr = convertToStardColor(hc);
+//                if (bgColorStr != null && !"".equals(bgColorStr.trim())) {
+//                    sb.append("background-color:" + bgColorStr + ";"); // 背景颜色
+//                }
+//                sb.append(getBorderStyle(palette, 0, cellStyle.getBorderTop(), cellStyle.getTopBorderColor()));
+//                sb.append(getBorderStyle(palette, 1, cellStyle.getBorderRight(), cellStyle.getRightBorderColor()));
+//                sb.append(getBorderStyle(palette, 3, cellStyle.getBorderLeft(), cellStyle.getLeftBorderColor()));
+//                sb.append(getBorderStyle(palette, 2, cellStyle.getBorderBottom(), cellStyle.getBottomBorderColor()));
+//            }
+//            sb.append("' ");
+//        }
+//    }
+
     /**
      * 单元格内容的水平对齐方式
      * @param alignment
      * @return
      */
-    private static String convertAlignToHtml(short alignment) {
+    private static String convertAlignToHtml(HorizontalAlignment alignment) {
         String align = "left";
-        switch (alignment) {
-            case CellStyle.ALIGN_LEFT:
-                align = "left";
-                break;
-            case CellStyle.ALIGN_CENTER:
-                align = "center";
-                break;
-            case CellStyle.ALIGN_RIGHT:
-                align = "right";
-                break;
-            default:
-                break;
+//        switch (alignment) {
+//            case HorizontalAlignment.LEFT:
+//                align = "left";
+//                break;
+//            case HorizontalAlignment.CENTER:
+//                align = "center";
+//                break;
+//            case HorizontalAlignment.RIGHT:
+//                align = "right";
+//                break;
+//            default:
+//                break;
+//        }
+        short code = alignment.getCode();
+        if (code == HorizontalAlignment.LEFT.getCode()) {
+            align = "left";
+        } else if (code == HorizontalAlignment.CENTER.getCode()) {
+            align = "center";
+        } else if (code == HorizontalAlignment.RIGHT.getCode()) {
+            align = "right";
         }
         return align;
     }
+
+//    private static String convertAlignToHtml_3_14(short alignment) {
+//        String align = "left";
+//        switch (alignment) {
+//            case CellStyle.ALIGN_LEFT:
+//                align = "left";
+//                break;
+//            case CellStyle.ALIGN_CENTER:
+//                align = "center";
+//                break;
+//            case CellStyle.ALIGN_RIGHT:
+//                align = "right";
+//                break;
+//            default:
+//                break;
+//        }
+//        return align;
+//    }
 
     /**
      * 单元格中内容的垂直排列方式
      * @param verticalAlignment
      * @return
      */
-    private static String convertVerticalAlignToHtml(short verticalAlignment) {
+    private static String convertVerticalAlignToHtml(VerticalAlignment verticalAlignment) {
         String valign = "middle";
-        switch (verticalAlignment) {
-            case CellStyle.VERTICAL_BOTTOM:
-                valign = "bottom";
-                break;
-            case CellStyle.VERTICAL_CENTER:
-                valign = "center";
-                break;
-            case CellStyle.VERTICAL_TOP:
-                valign = "top";
-                break;
-            default:
-                break;
+//        switch (verticalAlignment) {
+//            case CellStyle.VERTICAL_BOTTOM:
+//                valign = "bottom";
+//                break;
+//            case CellStyle.VERTICAL_CENTER:
+//                valign = "center";
+//                break;
+//            case CellStyle.VERTICAL_TOP:
+//                valign = "top";
+//                break;
+//            default:
+//                break;
+//        }
+        short code = verticalAlignment.getCode();
+        if (code == VerticalAlignment.BOTTOM.getCode()) {
+            valign = "bottom";
+        } else if (code == VerticalAlignment.CENTER.getCode()) {
+            valign = "center";
+        } else if (code == VerticalAlignment.TOP.getCode()) {
+            valign = "top";
         }
         return valign;
     }
+
+//    private static String convertVerticalAlignToHtml_3_14(short verticalAlignment) {
+//        String valign = "middle";
+//        switch (verticalAlignment) {
+//            case CellStyle.VERTICAL_BOTTOM:
+//                valign = "bottom";
+//                break;
+//            case CellStyle.VERTICAL_CENTER:
+//                valign = "center";
+//                break;
+//            case CellStyle.VERTICAL_TOP:
+//                valign = "top";
+//                break;
+//            default:
+//                break;
+//        }
+//        return valign;
+//    }
 
     private static String convertToStardColor(HSSFColor hc) {
         StringBuffer sb = new StringBuffer("");

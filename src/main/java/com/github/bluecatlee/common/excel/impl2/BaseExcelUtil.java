@@ -1,8 +1,10 @@
 package com.github.bluecatlee.common.excel.impl2;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JRuntimeException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
@@ -34,7 +36,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * todo poi的版本不能太高
  */
 @Service
 public class BaseExcelUtil<T> {
@@ -225,7 +226,7 @@ public class BaseExcelUtil<T> {
         }
         // 添加excel内容
         HSSFCellStyle style = sheet.getWorkbook().createCellStyle();
-        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        style.setAlignment(HorizontalAlignment.CENTER);
         for (int i = 0; i < list.size(); i++) {
             Map<String, Object> map = list.get(i);
             Set<String> set = map.keySet();
@@ -255,6 +256,80 @@ public class BaseExcelUtil<T> {
 
         return wb;
     }
+
+//    private static <T> HSSFWorkbook writeXlsData2003_3_14(List<T> dataList, String[] titleName, String[] tableField) {
+//        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+//        if (dataList != null) {
+//            for (T t : dataList) {
+//                Map<String, Object> map = new HashMap<String, Object>();
+//                // BeanUtils.populate(r, map);
+//                map = transBean2Map(t);
+//                list.add(map);
+//            }
+//        }
+//        List<Map<String, String>> header = new ArrayList<Map<String, String>>();
+//        for (int i = 0; i < titleName.length; i++) {
+//            Map<String, String> map = new HashMap<String, String>();
+//            map.put("name", titleName[i]);
+//            map.put("field", tableField[i]);
+//            header.add(map);
+//        }
+//
+//        HSSFWorkbook wb = new HSSFWorkbook();
+//        HSSFSheet sheet = wb.createSheet();
+//        HSSFRow row = null;
+//        // 创建标题 以第一行作为标题
+//        row = sheet.createRow(0);
+//        HSSFCellStyle greenStyle = createGreenStyle(wb);
+//        if (header != null) {
+//            Cell cell = null;
+//            for (int i = 0; i < header.size(); i++) {
+//                cell = row.createCell(i);
+//                cell.setCellValue(header.get(i).get("name") == null ? "" : header.get(i).get("name").toString());
+//                cell.setCellStyle(greenStyle);
+//                sheet.setColumnWidth(i, 4000);
+//            }
+//        } else if (list.size() > 0) {
+//            // 如果header不存在 则以字段名作为标题
+//            Cell cell = null;
+//            Object[] keys = list.get(0).keySet().toArray();
+//            for (int i = 0; i < keys.length; i++) {
+//                cell = row.createCell(i);
+//                cell.setCellValue(keys[i].toString());
+//            }
+//        }
+//        // 添加excel内容
+//        HSSFCellStyle style = sheet.getWorkbook().createCellStyle();
+//        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+//        for (int i = 0; i < list.size(); i++) {
+//            Map<String, Object> map = list.get(i);
+//            Set<String> set = map.keySet();
+//            Object[] keys = set.toArray();
+//            row = sheet.createRow(i + 1);
+//            Cell cell = null;
+//
+//            for (int j = 0; j < header.size(); j++) {
+//                cell = row.createCell(j);
+//                if (header != null) {
+//                    String value = "";
+//                    try {
+//                        value = map.get(header.get(j).get("field")).toString();
+//                    } catch (Exception e) {
+//                        value = "";
+//                        // e.printStackTrace();
+//                    }
+//
+//                    cell.setCellValue(value);
+//                    cell.setCellStyle(style);
+//                } else {
+//                    cell.setCellValue(map.get(keys[j].toString()).toString());
+//                    cell.setCellStyle(style);
+//                }
+//            }
+//        }
+//
+//        return wb;
+//    }
 
     /**
      * 导出2007
@@ -331,7 +406,7 @@ public class BaseExcelUtil<T> {
         }
 
         CellStyle style = sheet.getWorkbook().createCellStyle();
-        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        style.setAlignment(HorizontalAlignment.CENTER);
         SXSSFRow row = null;
         // 创建表头
         row = sheet.createRow(0);
@@ -341,7 +416,8 @@ public class BaseExcelUtil<T> {
                 cell = row.createCell(i);
                 cell.setCellValue(header.get(i).get("name") == null ? "" : header.get(i).get("name").toString());
                 cell.setCellStyle(greenStyle);
-                cell.setCellType(Cell.CELL_TYPE_STRING);
+//                cell.setCellType(Cell.CELL_TYPE_STRING);
+                cell.setCellType(CellType.STRING);
                 sheet.setColumnWidth(i, 4000);
             }
         } else if (list.size() > 0) {
@@ -350,7 +426,8 @@ public class BaseExcelUtil<T> {
             for (int i = 0; i < keys.length; i++) {
                 cell = row.createCell(i);
                 cell.setCellValue(keys[i].toString());
-                cell.setCellType(Cell.CELL_TYPE_STRING);
+//                cell.setCellType(Cell.CELL_TYPE_STRING);
+                cell.setCellType(CellType.STRING);
             }
         }
 
@@ -369,13 +446,16 @@ public class BaseExcelUtil<T> {
                     try {
                         String key = header.get(j).get("field");
                         if (key.contains("@")) {
-                            cell = row.createCell(j, Cell.CELL_TYPE_NUMERIC);
+//                            cell = row.createCell(j, Cell.CELL_TYPE_NUMERIC);
+                            cell = row.createCell(j, CellType.NUMERIC);
                             value = map.get(key.replace("@", "")).toString();
-                            cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+//                            cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+                            cell.setCellType(CellType.NUMERIC);
                             cell.setCellValue(Double.valueOf(value));
                             cell.setCellStyle(style);
                         } else {
-                            cell = row.createCell(j, Cell.CELL_TYPE_STRING);
+//                            cell = row.createCell(j, Cell.CELL_TYPE_STRING);
+                            cell = row.createCell(j, CellType.STRING);
                             value = map.get(key).toString();
                             cell.setCellValue(value);
                             cell.setCellStyle(style);
@@ -394,6 +474,135 @@ public class BaseExcelUtil<T> {
 
         return wb;
     }
+
+//    private static <T> SXSSFWorkbook writeXlsxData2007_3_14(List<T> dataList, String[] titleName, String[] titleField, Map<String, String[]> headerCheckList, String fileName) {
+//        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+//        if (titleName == null) {
+//            return null;
+//        }
+//        if (titleField == null) {
+//            return null;
+//        }
+//        if (titleName.length != titleField.length) {
+//            return null;
+//        }
+//
+//        if (dataList != null) {
+//            for (T t : dataList) {
+//                Map<String, Object> map = new HashMap<String, Object>();
+//                map = transBean2Map(t);
+//                list.add(map);
+//            }
+//        }
+//        SXSSFWorkbook wb = new SXSSFWorkbook(500);
+//        SXSSFSheet sheet = wb.createSheet(fileName.split("\\.")[0]);
+//        XSSFCellStyle greenStyle = (XSSFCellStyle) createGreenStyle(wb);
+//        List<Map<String, String>> header = new ArrayList<Map<String, String>>();
+//        for (int i = 0; i < titleName.length; i++) {
+//            Map<String, String> map = new HashMap<String, String>();
+//            map.put("name", titleName[i]);
+//            map.put("field", titleField[i]);
+//            header.add(map);
+//            if (headerCheckList != null && headerCheckList.containsKey(titleField[i]) && headerCheckList.get(titleField[i]).length < 10) {
+//                // 添加验证
+//                DataValidation data_validation_list = setDataValidationList(sheet, headerCheckList.get(titleField[i]), 1, 1000000, i, i);
+//                // 设置提示内容,标题,内容
+//                data_validation_list.createPromptBox("提示", "请选择");
+//                data_validation_list.createErrorBox("错误", "请输入有效值");
+//                data_validation_list.setEmptyCellAllowed(false);
+//                data_validation_list.setShowErrorBox(true);
+//                data_validation_list.setShowPromptBox(true);
+//                // 工作表添加验证数据
+//                sheet.addValidationData(data_validation_list);
+//            } else if (headerCheckList != null && headerCheckList.containsKey(titleField[i])) {
+//                SXSSFSheet sheetName = wb.createSheet(titleName[i]);
+//                // 设置头
+//                SXSSFRow row = sheetName.createRow(0);
+//                Cell cell1 = row.createCell(0);
+//                cell1.setCellValue("代码");
+//                cell1.setCellStyle(greenStyle);
+//                Cell cell2 = row.createCell(1);
+//                cell2.setCellValue("名称");
+//                cell2.setCellStyle(greenStyle);
+//                String[] nameList = headerCheckList.get(titleField[i]);
+//                for (int j = 0; j < nameList.length; j++) {
+//                    SXSSFRow rowJ = sheetName.createRow(j + 1);
+//                    Cell cellA = rowJ.createCell(0);
+//                    if (nameList[j].split("-").length < 1) {
+//                        continue;
+//                    }
+//                    cellA.setCellValue(nameList[j].split("-")[0]);
+//                    Cell cellB = rowJ.createCell(1);
+//                    cellB.setCellValue(nameList[j].split("-")[1]);
+//                }
+//
+//            }
+//        }
+//
+//        CellStyle style = sheet.getWorkbook().createCellStyle();
+//        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+//        SXSSFRow row = null;
+//        // 创建表头
+//        row = sheet.createRow(0);
+//        if (header != null) {
+//            Cell cell = null;
+//            for (int i = 0; i < header.size(); i++) {
+//                cell = row.createCell(i);
+//                cell.setCellValue(header.get(i).get("name") == null ? "" : header.get(i).get("name").toString());
+//                cell.setCellStyle(greenStyle);
+//                cell.setCellType(Cell.CELL_TYPE_STRING);
+//                sheet.setColumnWidth(i, 4000);
+//            }
+//        } else if (list.size() > 0) {
+//            Cell cell = null;
+//            Object[] keys = list.get(0).keySet().toArray();
+//            for (int i = 0; i < keys.length; i++) {
+//                cell = row.createCell(i);
+//                cell.setCellValue(keys[i].toString());
+//                cell.setCellType(Cell.CELL_TYPE_STRING);
+//            }
+//        }
+//
+//        // 添加excel内容
+//        for (int i = 0; i < list.size(); i++) {
+//            Map<String, Object> map = list.get(i);
+//            Set<String> set = map.keySet();
+//            Object[] keys = set.toArray();
+//            row = sheet.createRow(i + 1);
+//            row.setRowStyle(style);
+//            Cell cell = null;
+//
+//            for (int j = 0; j < header.size(); j++) {
+//                if (header != null) {
+//                    String value = "";
+//                    try {
+//                        String key = header.get(j).get("field");
+//                        if (key.contains("@")) {
+//                            cell = row.createCell(j, Cell.CELL_TYPE_NUMERIC);
+//                            value = map.get(key.replace("@", "")).toString();
+//                            cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+//                            cell.setCellValue(Double.valueOf(value));
+//                            cell.setCellStyle(style);
+//                        } else {
+//                            cell = row.createCell(j, Cell.CELL_TYPE_STRING);
+//                            value = map.get(key).toString();
+//                            cell.setCellValue(value);
+//                            cell.setCellStyle(style);
+//                        }
+//                    } catch (Exception e) {
+//                        value = "";
+//                        // e.printStackTrace();
+//                    }
+//
+//                } else {
+//                    cell.setCellValue(map.get(keys[j].toString()).toString());
+//                    cell.setCellStyle(style);
+//                }
+//            }
+//        }
+//
+//        return wb;
+//    }
 
     /**
      * 保存数据到excel文件
@@ -560,27 +769,54 @@ public class BaseExcelUtil<T> {
         Font font = wb.createFont();
         font.setFontHeightInPoints((short) 11); // 字体高度
         font.setFontName("宋体"); // 字体
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);// 粗体显示
+        font.setBold(true);
 
         CellStyle greenStyle = wb.createCellStyle();
-        greenStyle.setFillBackgroundColor(HSSFCellStyle.LEAST_DOTS);
-        greenStyle.setFillPattern(HSSFCellStyle.LEAST_DOTS);
-        greenStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
-        greenStyle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
-        greenStyle.setBottomBorderColor(HSSFColor.BLACK.index);
-        greenStyle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
-        greenStyle.setLeftBorderColor(HSSFColor.BLACK.index);
-        greenStyle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
-        greenStyle.setRightBorderColor(HSSFColor.BLACK.index);
-        greenStyle.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
-        greenStyle.setTopBorderColor(HSSFColor.BLACK.index);
+        greenStyle.setFillBackgroundColor(FillPatternType.LEAST_DOTS.getCode()); //?
+        greenStyle.setFillPattern(FillPatternType.LEAST_DOTS);
+        greenStyle.setAlignment(HorizontalAlignment.CENTER);
+        greenStyle.setBorderBottom(BorderStyle.MEDIUM);
+        greenStyle.setBottomBorderColor(IndexedColors.BLACK.index);
+        greenStyle.setBorderLeft(BorderStyle.MEDIUM);
+        greenStyle.setLeftBorderColor(IndexedColors.BLACK.index);
+        greenStyle.setBorderRight(BorderStyle.MEDIUM);
+        greenStyle.setRightBorderColor(IndexedColors.BLACK.index);
+        greenStyle.setBorderTop(BorderStyle.MEDIUM);
+        greenStyle.setTopBorderColor(IndexedColors.BLACK.index);
         greenStyle.setFont(font);
-        greenStyle.setFillForegroundColor(HSSFColor.LIGHT_GREEN.index);
-        greenStyle.setFillBackgroundColor(HSSFColor.LIGHT_GREEN.index);
+        greenStyle.setFillForegroundColor(IndexedColors.LIGHT_GREEN.index);
+        greenStyle.setFillBackgroundColor(IndexedColors.LIGHT_GREEN.index);
         greenStyle.setWrapText(true);
 
         return greenStyle;
     }
+
+//    private static CellStyle createGreenStyle_3_14(SXSSFWorkbook wb) {
+//        // 设置字体
+//        Font font = wb.createFont();
+//        font.setFontHeightInPoints((short) 11); // 字体高度
+//        font.setFontName("宋体"); // 字体
+//        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);// 粗体显示
+//
+//        CellStyle greenStyle = wb.createCellStyle();
+//        greenStyle.setFillBackgroundColor(HSSFCellStyle.LEAST_DOTS);
+//        greenStyle.setFillPattern(HSSFCellStyle.LEAST_DOTS);
+//        greenStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+//        greenStyle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+//        greenStyle.setBottomBorderColor(HSSFColor.BLACK.index);
+//        greenStyle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+//        greenStyle.setLeftBorderColor(HSSFColor.BLACK.index);
+//        greenStyle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+//        greenStyle.setRightBorderColor(HSSFColor.BLACK.index);
+//        greenStyle.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+//        greenStyle.setTopBorderColor(HSSFColor.BLACK.index);
+//        greenStyle.setFont(font);
+//        greenStyle.setFillForegroundColor(HSSFColor.LIGHT_GREEN.index);
+//        greenStyle.setFillBackgroundColor(HSSFColor.LIGHT_GREEN.index);
+//        greenStyle.setWrapText(true);
+//
+//        return greenStyle;
+//    }
 
     /**
      * 设置Excel样式2003
@@ -592,27 +828,54 @@ public class BaseExcelUtil<T> {
         Font font = wb.createFont();
         font.setFontHeightInPoints((short) 11); // 字体高度
         font.setFontName("宋体"); // 字体
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);// 粗体显示
+        font.setBold(true);
 
         HSSFCellStyle greenStyle = wb.createCellStyle();
-        greenStyle.setFillBackgroundColor(HSSFCellStyle.LEAST_DOTS);
-        greenStyle.setFillPattern(HSSFCellStyle.LEAST_DOTS);
-        greenStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
-        greenStyle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
-        greenStyle.setBottomBorderColor(HSSFColor.BLACK.index);
-        greenStyle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
-        greenStyle.setLeftBorderColor(HSSFColor.BLACK.index);
-        greenStyle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
-        greenStyle.setRightBorderColor(HSSFColor.BLACK.index);
-        greenStyle.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
-        greenStyle.setTopBorderColor(HSSFColor.BLACK.index);
+        greenStyle.setFillBackgroundColor(FillPatternType.LEAST_DOTS.getCode()); //?
+        greenStyle.setFillPattern(FillPatternType.LEAST_DOTS);
+        greenStyle.setAlignment(HorizontalAlignment.CENTER);
+        greenStyle.setBorderBottom(BorderStyle.MEDIUM);
+        greenStyle.setBottomBorderColor(IndexedColors.BLACK.index);
+        greenStyle.setBorderLeft(BorderStyle.MEDIUM);
+        greenStyle.setLeftBorderColor(IndexedColors.BLACK.index);
+        greenStyle.setBorderRight(BorderStyle.MEDIUM);
+        greenStyle.setRightBorderColor(IndexedColors.BLACK.index);
+        greenStyle.setBorderTop(BorderStyle.MEDIUM);
+        greenStyle.setTopBorderColor(IndexedColors.BLACK.index);
         greenStyle.setFont(font);
-        greenStyle.setFillForegroundColor(HSSFColor.LIGHT_GREEN.index);
-        greenStyle.setFillBackgroundColor(HSSFColor.LIGHT_GREEN.index);
+        greenStyle.setFillForegroundColor(IndexedColors.LIGHT_GREEN.index);
+        greenStyle.setFillBackgroundColor(IndexedColors.LIGHT_GREEN.index);
         greenStyle.setWrapText(true);
 
         return greenStyle;
     }
+
+//    private static HSSFCellStyle createGreenStyle_3_14(HSSFWorkbook wb) {
+//        // 设置字体
+//        Font font = wb.createFont();
+//        font.setFontHeightInPoints((short) 11); // 字体高度
+//        font.setFontName("宋体"); // 字体
+//        font.setBold(true);
+//
+//        HSSFCellStyle greenStyle = wb.createCellStyle();
+//        greenStyle.setFillBackgroundColor(HSSFCellStyle.LEAST_DOTS);
+//        greenStyle.setFillPattern(HSSFCellStyle.LEAST_DOTS);
+//        greenStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+//        greenStyle.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
+//        greenStyle.setBottomBorderColor(HSSFColor.BLACK.index);
+//        greenStyle.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
+//        greenStyle.setLeftBorderColor(HSSFColor.BLACK.index);
+//        greenStyle.setBorderRight(HSSFCellStyle.BORDER_MEDIUM);
+//        greenStyle.setRightBorderColor(HSSFColor.BLACK.index);
+//        greenStyle.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
+//        greenStyle.setTopBorderColor(HSSFColor.BLACK.index);
+//        greenStyle.setFont(font);
+//        greenStyle.setFillForegroundColor(HSSFColor.LIGHT_GREEN.index);
+//        greenStyle.setFillBackgroundColor(HSSFColor.LIGHT_GREEN.index);
+//        greenStyle.setWrapText(true);
+//
+//        return greenStyle;
+//    }
 
     /**
      * 设置Excel样式2007
@@ -625,27 +888,54 @@ public class BaseExcelUtil<T> {
         XSSFFont font = wb.createFont();
         font.setFontHeightInPoints((short) 11); // 字体高度
         font.setFontName("宋体"); // 字体
-        font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);// 粗体显示
+        font.setBold(true);
 
         XSSFCellStyle greenStyle = wb.createCellStyle();
-        greenStyle.setFillBackgroundColor(XSSFCellStyle.LEAST_DOTS);
-        greenStyle.setFillPattern(XSSFCellStyle.LEAST_DOTS);
-        greenStyle.setAlignment(XSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
-        greenStyle.setBorderBottom(XSSFCellStyle.BORDER_MEDIUM);
-        greenStyle.setBottomBorderColor(HSSFColor.BLACK.index);
-        greenStyle.setBorderLeft(XSSFCellStyle.BORDER_MEDIUM);
-        greenStyle.setLeftBorderColor(HSSFColor.BLACK.index);
-        greenStyle.setBorderRight(XSSFCellStyle.BORDER_MEDIUM);
-        greenStyle.setRightBorderColor(HSSFColor.BLACK.index);
-        greenStyle.setBorderTop(XSSFCellStyle.BORDER_MEDIUM);
-        greenStyle.setTopBorderColor(HSSFColor.BLACK.index);
+        greenStyle.setFillBackgroundColor(FillPatternType.LEAST_DOTS.getCode()); //?
+        greenStyle.setFillPattern(FillPatternType.LEAST_DOTS);
+        greenStyle.setAlignment(HorizontalAlignment.CENTER);
+        greenStyle.setBorderBottom(BorderStyle.MEDIUM);
+        greenStyle.setBottomBorderColor(IndexedColors.BLACK.index);
+        greenStyle.setBorderLeft(BorderStyle.MEDIUM);
+        greenStyle.setLeftBorderColor(IndexedColors.BLACK.index);
+        greenStyle.setBorderRight(BorderStyle.MEDIUM);
+        greenStyle.setRightBorderColor(IndexedColors.BLACK.index);
+        greenStyle.setBorderTop(BorderStyle.MEDIUM);
+        greenStyle.setTopBorderColor(IndexedColors.BLACK.index);
         greenStyle.setFont(font);
-        greenStyle.setFillForegroundColor(HSSFColor.LIGHT_GREEN.index);
-        greenStyle.setFillBackgroundColor(HSSFColor.LIGHT_GREEN.index);
+        greenStyle.setFillForegroundColor(IndexedColors.LIGHT_GREEN.index);
+        greenStyle.setFillBackgroundColor(IndexedColors.LIGHT_GREEN.index);
         greenStyle.setWrapText(true);
 
         return greenStyle;
     }
+
+//    private static XSSFCellStyle createGreenStyle_3_14(XSSFWorkbook wb) {
+//        // 设置字体
+//        XSSFFont font = wb.createFont();
+//        font.setFontHeightInPoints((short) 11); // 字体高度
+//        font.setFontName("宋体"); // 字体
+//        font.setBoldweight(XSSFFont.BOLDWEIGHT_BOLD);// 粗体显示
+//
+//        XSSFCellStyle greenStyle = wb.createCellStyle();
+//        greenStyle.setFillBackgroundColor(XSSFCellStyle.LEAST_DOTS);
+//        greenStyle.setFillPattern(XSSFCellStyle.LEAST_DOTS);
+//        greenStyle.setAlignment(XSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+//        greenStyle.setBorderBottom(XSSFCellStyle.BORDER_MEDIUM);
+//        greenStyle.setBottomBorderColor(HSSFColor.BLACK.index);
+//        greenStyle.setBorderLeft(XSSFCellStyle.BORDER_MEDIUM);
+//        greenStyle.setLeftBorderColor(HSSFColor.BLACK.index);
+//        greenStyle.setBorderRight(XSSFCellStyle.BORDER_MEDIUM);
+//        greenStyle.setRightBorderColor(HSSFColor.BLACK.index);
+//        greenStyle.setBorderTop(XSSFCellStyle.BORDER_MEDIUM);
+//        greenStyle.setTopBorderColor(HSSFColor.BLACK.index);
+//        greenStyle.setFont(font);
+//        greenStyle.setFillForegroundColor(HSSFColor.LIGHT_GREEN.index);
+//        greenStyle.setFillBackgroundColor(HSSFColor.LIGHT_GREEN.index);
+//        greenStyle.setWrapText(true);
+//
+//        return greenStyle;
+//    }
 
     /**
      * 设置excel数据有效性
@@ -798,16 +1088,29 @@ public class BaseExcelUtil<T> {
 
     public static CellStyle createGeneralCellStyle(SXSSFWorkbook workbook) {
         CellStyle style = workbook.createCellStyle();
-        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        style.setAlignment(HorizontalAlignment.CENTER);
         return style;
     }
+
+//    public static CellStyle createGeneralCellStyle_3_14(SXSSFWorkbook workbook) {
+//        CellStyle style = workbook.createCellStyle();
+//        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+//        return style;
+//    }
 
     public static CellStyle createCellStyle(SXSSFWorkbook workbook, short hssfDataFormat) {
         CellStyle style = workbook.createCellStyle();
         style.setDataFormat(hssfDataFormat);
-        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        style.setAlignment(HorizontalAlignment.CENTER);
         return style;
     }
+
+//    public static CellStyle createCellStyle(SXSSFWorkbook workbook, short hssfDataFormat) {
+//        CellStyle style = workbook.createCellStyle();
+//        style.setDataFormat(hssfDataFormat);
+//        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+//        return style;
+//    }
 
     public static void cellBuild(int rowIndex, int colIndex, SXSSFSheet sheet, CellStyle style, int cellType, Object cellValue) {
         SXSSFRow row = sheet.getRow(rowIndex);
@@ -839,7 +1142,7 @@ public class BaseExcelUtil<T> {
         XSSFCellStyle greenStyle = (XSSFCellStyle) createGreenStyle(wb);
 
         CellStyle style = sheet.getWorkbook().createCellStyle();
-        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        style.setAlignment(HorizontalAlignment.CENTER);
         SXSSFRow row = null;
         // 添加excel头
         row = sheet.createRow(0);
@@ -856,6 +1159,29 @@ public class BaseExcelUtil<T> {
         }
         return wb;
     }
+
+//    public static SXSSFWorkbook sheetBuild_3_14(String[] tableName, String sheetName, SXSSFWorkbook wb) {
+//        SXSSFSheet sheet = wb.createSheet(sheetName);
+//        XSSFCellStyle greenStyle = (XSSFCellStyle) createGreenStyle(wb);
+//
+//        CellStyle style = sheet.getWorkbook().createCellStyle();
+//        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+//        SXSSFRow row = null;
+//        // 添加excel头
+//        row = sheet.createRow(0);
+//
+//        if (!ArrayUtils.isEmpty(tableName)) {
+//            Cell cell = null;
+//            for (int i = 0; i < tableName.length; i++) {
+//                cell = row.createCell(i);
+//                cell.setCellValue(tableName[i] == null ? "" : tableName[i]);
+//                cell.setCellStyle(greenStyle);
+//                cell.setCellType(Cell.CELL_TYPE_STRING);
+//                sheet.setColumnWidth(i, 4000);
+//            }
+//        }
+//        return wb;
+//    }
 
     /**
      * 在已存在的excel上追加数据
@@ -876,7 +1202,7 @@ public class BaseExcelUtil<T> {
         }
         SXSSFSheet sheet = wb.getSheetAt(0);
         CellStyle style = sheet.getWorkbook().createCellStyle();
-        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+        style.setAlignment(HorizontalAlignment.CENTER);
         int lastRowNum = sheet.getLastRowNum()+1;
         // 添加excel内容
         for (int i = 0; i < list.size(); i++) {
@@ -908,6 +1234,51 @@ public class BaseExcelUtil<T> {
         }
         return wb;
     }
+
+//    public SXSSFWorkbook addToBuild_3_14(List<T> data, String[] tableField, SXSSFWorkbook wb) {
+//        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+//
+//        if (null != data && !data.isEmpty()) {
+//            for (T t : data) {
+//                Map<String, Object> map = new HashMap<String, Object>();
+//                map = this.transBean2Map(t);
+//                list.add(map);
+//            }
+//        }
+//        SXSSFSheet sheet = wb.getSheetAt(0);
+//        CellStyle style = sheet.getWorkbook().createCellStyle();
+//        style.setAlignment(XSSFCellStyle.ALIGN_CENTER);
+//        int lastRowNum = sheet.getLastRowNum()+1;
+//        // 添加excel内容
+//        for (int i = 0; i < list.size(); i++) {
+//            Map<String, Object> map = list.get(i);
+//            SXSSFRow row=sheet.createRow(i + lastRowNum);
+//            row.setRowStyle(style);
+//            Cell cell = null;
+//
+//            for (int j = 0; j < tableField.length; j++) {
+//                String value = "";
+//                try {
+//                    String key = tableField[j];
+//                    if (key.contains("@")) {
+//                        cell = row.createCell(j, Cell.CELL_TYPE_NUMERIC);
+//                        value = map.get(key.replace("@", "")).toString();
+//                        cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+//                        cell.setCellValue(Double.valueOf(value));
+//                        cell.setCellStyle(style);
+//                    } else {
+//                        cell = row.createCell(j, Cell.CELL_TYPE_STRING);
+//                        value = map.get(key).toString();
+//                        cell.setCellValue(value);
+//                        cell.setCellStyle(style);
+//                    }
+//                } catch (Exception e) {
+//                    value = "";
+//                }
+//            }
+//        }
+//        return wb;
+//    }
 
     public static void downloadDataModel(HttpServletResponse res, SXSSFWorkbook wb, String fileName) {
         downloadDataModel(res, wb, fileName, null);
