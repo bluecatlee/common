@@ -1,6 +1,6 @@
 package com.github.bluecatlee.common.mybatis.tk;
 
-import com.github.bluecatlee.common.test.bean.CommonResp;
+import com.github.bluecatlee.common.negative.examples.bean.CommonResp;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;

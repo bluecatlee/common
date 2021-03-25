@@ -1,15 +1,14 @@
-package com.github.bluecatlee.common.excel.frame.service.impl;
+package com.github.bluecatlee.common.excel.impl1.service.impl;
 
-import com.github.bluecatlee.common.excel.frame.AbstractPoiExcel;
-import com.github.bluecatlee.common.excel.frame.mapper.CommonReportMapper;
-import com.github.bluecatlee.common.excel.frame.service.CommonReportService;
+import com.github.bluecatlee.common.excel.impl1.AbstractPoiExcel;
+import com.github.bluecatlee.common.excel.impl1.mapper.CommonReportMapper;
+import com.github.bluecatlee.common.excel.impl1.service.CommonReportService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.OutputStream;

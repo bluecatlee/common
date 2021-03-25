@@ -1,10 +1,9 @@
 package com.github.bluecatlee.common.test.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.github.bluecatlee.common.jackson.serializer.LongToStringSerializer;
-import com.github.bluecatlee.common.test.bean.CommonResp;
+import com.github.bluecatlee.common.negative.examples.bean.CommonResp;
 import com.github.bluecatlee.common.test.service.DemoService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;

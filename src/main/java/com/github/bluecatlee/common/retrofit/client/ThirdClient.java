@@ -3,7 +3,6 @@ package com.github.bluecatlee.common.retrofit.client;
 import com.alibaba.fastjson.JSONObject;
 import com.github.bluecatlee.common.retrofit.annotation.BaseUrl;
 import com.github.bluecatlee.common.retrofit.service.WeatherService;
-import com.github.bluecatlee.common.test.bean.CommonResp;
 import com.github.bluecatlee.common.test.bean.MessagePack;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;

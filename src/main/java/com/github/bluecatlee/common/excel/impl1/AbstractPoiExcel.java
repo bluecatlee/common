@@ -1,4 +1,4 @@
-package com.github.bluecatlee.common.excel.frame;
+package com.github.bluecatlee.common.excel.impl1;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
@@ -84,12 +84,12 @@ public abstract class AbstractPoiExcel {
 		font.setBold(true);//是否加粗字体
 		HSSFCellStyle s = excel.createCellStyle();
 		s.setFont(font);
-		s.setAlignment(HorizontalAlignment.CENTER);//水平居中
-		s.setVerticalAlignment(VerticalAlignment.CENTER);//垂直居中
-		s.setBorderBottom(BorderStyle.THIN);
-		s.setBorderRight(BorderStyle.THIN);
-		s.setBorderTop(BorderStyle.THIN);
-		s.setBorderLeft(BorderStyle.THIN);
+//		s.setAlignment(HorizontalAlignment.CENTER);//水平居中        todo poi版本不兼容问题 这个地方需要3.17
+//		s.setVerticalAlignment(VerticalAlignment.CENTER);//垂直居中
+//		s.setBorderBottom(BorderStyle.THIN);
+//		s.setBorderRight(BorderStyle.THIN);
+//		s.setBorderTop(BorderStyle.THIN);
+//		s.setBorderLeft(BorderStyle.THIN);
 		return s;
 	}
 

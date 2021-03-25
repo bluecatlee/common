@@ -1,7 +1,7 @@
 package com.github.bluecatlee.common.test.service;
 
 import com.github.bluecatlee.common.mybatis.tk.BaseService;
-import com.github.bluecatlee.common.test.bean.CommonResp;
+import com.github.bluecatlee.common.negative.examples.bean.CommonResp;
 import com.github.bluecatlee.common.test.entity.TPosDevice;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;

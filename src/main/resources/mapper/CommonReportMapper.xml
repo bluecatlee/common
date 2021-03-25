@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.github.bluecatlee.common.excel.frame.mapper.CommonReportMapper">
+<mapper namespace="com.github.bluecatlee.common.excel.impl1.mapper.CommonReportMapper">
 
     <!-- 通用报表查询 -->
     <select id="commonReportQuery" parameterType="java.util.Map" resultType="java.util.HashMap" statementType="CALLABLE">
